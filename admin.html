@@ -9,21 +9,40 @@
   @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@400;600&display=swap');
   body{font-family:'Poppins',sans-serif;background:#FFFFF0;padding:20px;margin:0}
   h1,h2,h3{font-family:'Playfair Display',serif;color:#3E2F2F}
-.box{background:#fff;border:2px solid #D4AF37;border-radius:12px;padding:20px;margin-bottom:20px}
-  input{width:100%;padding:10px;margin:8px 0;border:1px solid #ccc;border-radius:8px;box-sizing:border-box}
+ .box{background:#fff;border:2px solid #D4AF37;border-radius:12px;padding:20px;margin-bottom:20px}
+  input,textarea{width:100%;padding:10px;margin:8px 0;border:1px solid #ccc;border-radius:8px;box-sizing:border-box}
   button{padding:10px 20px;background:#D4AF37;color:#fff;border:none;border-radius:8px;cursor:pointer;font-weight:600;margin:5px}
-.btn-hapus{background:#e74c3c}.btn-edit{background:#3498db}
-.produk-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:15px}
-.produk-card{border:1px solid #eee;padding:10px;border-radius:8px;text-align:center;background:#fff}
-.produk-card img{width:100%;height:140px;object-fit:cover;border-radius:8px}
-.btn-group{display:flex;gap:5px;margin-top:10px}
-.btn-group button{flex:1;padding:8px;font-size:12px}
+ .btn-hapus{background:#e74c3c}.btn-edit{background:#3498db}
+ .produk-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:15px}
+ .produk-card{border:1px solid #eee;padding:10px;border-radius:8px;text-align:center;background:#fff}
+ .produk-card img{width:100%;height:140px;object-fit:cover;border-radius:8px}
+ .btn-group{display:flex;gap:5px;margin-top:10px}
+ .btn-group button{flex:1;padding:8px;font-size:12px}
   #previewGambar{width:100px;height:100px;object-fit:cover;border-radius:8px;margin-top:10px}
+ .banner-preview{width:100%;max-height:150px;object-fit:cover;border-radius:8px;margin-top:10px}
 </style>
 </head>
 <body>
 
 <h1>Dashboard Admin DEWAACAKE</h1>
+
+<div class="box">
+  <h2>Pengaturan Website</h2>
+  <label>Judul Website</label>
+  <input id="judulWebsite">
+  <label>Deskripsi</label>
+  <textarea id="deskripsiWebsite" rows="3"></textarea>
+  <label>Nomor WhatsApp</label>
+  <input id="noWA" placeholder="62812xxxxxxx">
+  <button onclick="simpanSetting()">Simpan Pengaturan</button>
+</div>
+
+<div class="box">
+  <h2>Banner Utama</h2>
+  <img id="bannerPreview" class="banner-preview" style="display:none">
+  <input id="uploadBanner" type="file" accept="image/*">
+  <button onclick="uploadBanner()">Upload Banner</button>
+</div>
 
 <div class="box">
   <h2 id="formTitle">Tambah Produk Baru</h2>
@@ -51,6 +70,50 @@ const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY)
 let modeEdit = false
 let produkEdit = {}
 
+// LOAD SEMUA PAS BUKA
+loadSetting()
+loadBanner()
+loadProduk()
+
+// SETTING
+async function loadSetting(){
+  const { data } = await supabase.from('setting').select('*').single()
+  if(data){
+    document.getElementById('judulWebsite').value = data.judul || ''
+    document.getElementById('deskripsiWebsite').value = data.deskripsi || ''
+    document.getElementById('noWA').value = data.no_wa || ''
+  }
+}
+async function simpanSetting(){
+  const judul = document.getElementById('judulWebsite').value
+  const deskripsi = document.getElementById('deskripsiWebsite').value
+  const no_wa = document.getElementById('noWA').value
+  await supabase.from('setting').upsert({id:1,judul,deskripsi,no_wa})
+  alert('Pengaturan tersimpan')
+}
+
+// BANNER
+async function loadBanner(){
+  const { data } = await supabase.from('setting').select('banner_url').single()
+  if(data?.banner_url){
+    document.getElementById('bannerPreview').src = data.banner_url
+    document.getElementById('bannerPreview').style.display = 'block'
+  }
+}
+async function uploadBanner(){
+  const file = document.getElementById('uploadBanner').files[0]
+  if(!file){alert('Pilih file dulu');return}
+  const fileName = `banner-${Date.now()}-${file.name}`
+  const { error } = await supabase.storage.from('banners').upload(fileName, file)
+  if(!error){
+    const { data: urlData } = supabase.storage.from('banners').getPublicUrl(fileName)
+    await supabase.from('setting').upsert({id:1,banner_url:urlData.publicUrl})
+    alert('Banner terupload')
+    loadBanner()
+  } else { alert('Gagal: ' + error.message) }
+}
+
+// PRODUK
 document.getElementById('uploadGambar').addEventListener('change', async (e) => {
   const file = e.target.files[0]
   if(!file) return
@@ -82,7 +145,6 @@ async function simpanProduk(){
   alert('Berhasil')
   batalEdit()
   loadProduk()
-
   document.getElementById('btnSimpan').innerText = modeEdit? 'Update Produk' : '+ Simpan Produk'
   document.getElementById('btnSimpan').disabled = false
 }
@@ -137,8 +199,6 @@ async function hapusProduk(id){
   await supabase.from('produk').delete().eq('id', id)
   alert('Produk dihapus'); loadProduk()
 }
-
-loadProduk()
 </script>
 </body>
 </html>
