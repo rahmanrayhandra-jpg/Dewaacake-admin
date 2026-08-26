@@ -1,205 +1,132 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Admin - DEWAACAKE</title>
-<style>
-  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@400;600&display=swap');
-  body{font-family:'Poppins',sans-serif;background:#FFFFF0;padding:20px;margin:0}
-  h1,h2,h3{font-family:'Playfair Display',serif;color:#3E2F2F}
-.box{background:#fff;border:2px solid #D4AF37;border-radius:12px;padding:20px;margin-bottom:20px}
-  input{width:100%;padding:10px;margin:8px 0;border:1px solid #ccc;border-radius:8px;box-sizing:border-box}
-  button{padding:10px 20px;background:#D4AF37;color:#fff;border:none;border-radius:8px;cursor:pointer;font-weight:600;margin:5px 5px 5px 0}
-  button:hover{opacity:0.9} button:disabled{background:#ccc}
-.btn-hapus{background:#e74c3c}.btn-edit{background:#3498db}
-  #notifProduk{margin-top:10px;font-weight:600}
-.produk-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:15px}
-.produk-card{border:1px solid #eee;padding:10px;border-radius:8px;text-align:center;background:#fff}
-.produk-card img{width:100%;height:140px;object-fit:cover;border-radius:8px;margin-bottom:8px}
-.btn-group{display:flex;gap:5px;margin-top:10px}
-.btn-group button{flex:1;padding:8px;font-size:12px}
-  #previewGambar{width:100px;height:100px;object-fit:cover;border-radius:8px;margin-top:10px;border:1px solid #ddd}
- .banner-preview{margin-top:10px;text-align:center}
- .banner-preview img{max-width:200px;border-radius:8px;border:1px solid #ddd}
-</style>
-</head>
-<body>
-
-<h1>Dashboard Admin DEWAACAKE</h1>
-
-<div class="box">
-  <h2 id="formTitle">Tambah Produk Baru</h2>
-  <input id="idProduk" type="hidden">
-  <input id="namaProduk" placeholder="Nama Produk. Contoh: Kunafa Jeruk">
-  <input id="hargaProduk" placeholder="Harga. Contoh: 35000" type="number">
-  <label>Upload Gambar:</label>
-  <input id="uploadGambar" type="file" accept="image/*">
-  <img id="previewGambar" style="display:none">
-  <input id="gambarProduk" type="hidden">
-  <button onclick="simpanProduk()" id="btnSimpan">+ Simpan Produk</button>
-  <button onclick="batalEdit()" id="btnBatal" style="display:none;background:#95a5a6">Batal</button>
-  <p id="notifProduk"></p>
-</div>
-
-<hr style="margin:40px 0">
-<h2>Setting Halaman</h2>
-
-<div class="box">
-  <h3>Banner Homepage - index.html</h3>
-  <input type="file" id="uploadBannerHome" accept="image/*">
-  <button onclick="uploadBanner('banner_home', 'uploadBannerHome')">Upload Banner Home</button>
-  <button class="btn-hapus" onclick="hapusBanner('banner_home')">Hapus Banner</button>
-  <div class="banner-preview"><img id="preview_home" style="display:none;"></div>
-</div>
-
-<div class="box">
-  <h3>Banner Menu - menu.html</h3>
-  <input type="file" id="uploadBannerMenu" accept="image/*">
-  <button onclick="uploadBanner('banner_menu', 'uploadBannerMenu')">Upload Banner Menu</button>
-  <button class="btn-hapus" onclick="hapusBanner('banner_menu')">Hapus Banner</button>
-  <div class="banner-preview"><img id="preview_menu" style="display:none;"></div>
-</div>
-
-<div class="box">
-  <h3>Testimoni 1</h3>
-  <input type="file" id="uploadTesti1" accept="image/*">
-  <button onclick="uploadBanner('testi_1', 'uploadTesti1')">Upload Testi 1</button>
-  <button class="btn-hapus" onclick="hapusBanner('testi_1')">Hapus</button>
-  <div class="banner-preview"><img id="preview_1" style="display:none;"></div>
-</div>
-
-<div class="box">
-  <h3>Testimoni 2</h3>
-  <input type="file" id="uploadTesti2" accept="image/*">
-  <button onclick="uploadBanner('testi_2', 'uploadTesti2')">Upload Testi 2</button>
-  <button class="btn-hapus" onclick="hapusBanner('testi_2')">Hapus</button>
-  <div class="banner-preview"><img id="preview_2" style="display:none;"></div>
-</div>
-
-<div class="box">
-  <h3>Testimoni 3</h3>
-  <input type="file" id="uploadTesti3" accept="image/*">
-  <button onclick="uploadBanner('testi_3', 'uploadTesti3')">Upload Testi 3</button>
-  <button class="btn-hapus" onclick="hapusBanner('testi_3')">Hapus</button>
-  <div class="banner-preview"><img id="preview_3" style="display:none;"></div>
-</div>
-
-<div class="box">
-  <h3>Tentang Kami</h3>
-  <input type="file" id="uploadTentang" accept="image/*">
-  <button onclick="uploadBanner('tentang_kami', 'uploadTentang')">Upload Tentang Kami</button>
-  <button class="btn-hapus" onclick="hapusBanner('tentang_kami')">Hapus</button>
-  <div class="banner-preview"><img id="preview_kami" style="display:none;"></div>
-</div>
-
-<div class="box">
-  <h2>Daftar Produk</h2>
-  <div id="listProduk" class="produk-list">Loading...</div>
-</div>
-
-<script>
-const SUPABASE_URL = 'https://ybfxqkwkbzgquhdazxwn.supabase.co'
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InliZnhxa3drYnpncXVoZGF6eHduIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc2Njc0OTIsImV4cCI6MjEwMzI0MzQ5Mn0.byXU-wZzhkCMaIohHd_obc5b7oWq5Vu9SkCUacEO9fE'
-const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY)
-
-let modeEdit = false
-
-// UPLOAD PRODUK
-document.getElementById('uploadGambar').addEventListener('change', async (e) => {
-  const file = e.target.files[0]
-  if(!file) return
-  const fileName = `produk-${Date.now()}-${file.name}`
-  const { error } = await supabase.storage.from('produk').upload(fileName, file)
-  if(!error){
-    const { data: urlData } = supabase.storage.from('produk').getPublicUrl(fileName)
-    document.getElementById('gambarProduk').value = urlData.publicUrl
-    document.getElementById('previewGambar').src = urlData.publicUrl
-    document.getElementById('previewGambar').style.display = 'block'
-    alert('Gambar produk berhasil diupload')
-  }
-})
-
-// SIMPAN PRODUK
-async function simpanProduk(){
-  const id = document.getElementById('idProduk').value
-  const nama = document.getElementById('namaProduk').value.trim()
-  const harga = parseInt(document.getElementById('hargaProduk').value)
-  const gambar = document.getElementById('gambarProduk').value
-  if(!nama ||!harga ||!gambar){ alert('Lengkapi semua data!'); return }
-  if(modeEdit){ await supabase.from('produk').update({ nama, harga, gambar }).eq('id', id) }
-  else { await supabase.from('produk').insert([{ nama, harga, gambar }]) }
-  alert('Berhasil')
-  batalEdit()
-  loadProduk()
-}
-
-// LOAD PRODUK
-async function loadProduk(){
-  const { data } = await supabase.from('produk').select('*').order('id', {ascending:false})
-  let html = ''
-  data.forEach(p=>{
-    html += `<div class="produk-card">
-      <img src="${p.gambar}">
-      <h4>${p.nama}</h4>
-      <p><b>Rp${p.harga.toLocaleString('id-ID')}</b></p>
-      <div class="btn-group">
-        <button class="btn-edit" onclick="editProduk(${p.id}, '${p.nama}', ${p.harga}, '${p.gambar}')">Edit</button>
-        <button class="btn-hapus" onclick="hapusProduk(${p.id})">Hapus</button>
-      </div>
-    </div>`
-  })
-  document.getElementById('listProduk').innerHTML = html || 'Belum ada produk'
-}
-
-// EDIT HAPUS PRODUK
-function editProduk(id, nama, harga, gambar){ modeEdit = true; document.getElementById('formTitle').innerText = 'Edit Produk'; document.getElementById('btnSimpan').innerText = 'Update Produk'; document.getElementById('btnBatal').style.display = 'inline-block'; document.getElementById('idProduk').value = id; document.getElementById('namaProduk').value = nama; document.getElementById('hargaProduk').value = harga; document.getElementById('gambarProduk').value = gambar; document.getElementById('previewGambar').src = gambar; document.getElementById('previewGambar').style.display = 'block'; window.scrollTo(0,0) }
-function batalEdit(){ modeEdit = false; document.getElementById('formTitle').innerText = 'Tambah Produk Baru'; document.getElementById('btnSimpan').innerText = '+ Simpan Produk'; document.getElementById('btnBatal').style.display = 'none'; document.getElementById('idProduk').value = ''; document.getElementById('namaProduk').value = ''; document.getElementById('hargaProduk').value = ''; document.getElementById('gambarProduk').value = ''; document.getElementById('uploadGambar').value = ''; document.getElementById('previewGambar').style.display = 'none' }
-async function hapusProduk(id){
-  if(!confirm('Yakin mau hapus produk ini?')) return
-  const { error } = await supabase.from('produk').delete().eq('id', id)
-  if(error){ alert('Gagal hapus: ' + error.message) } else { alert('Produk dihapus'); loadProduk() }
-}
-
-// UPLOAD BANNER
-async function uploadBanner(key, inputId) {
-  const file = document.getElementById(inputId).files[0]
-  if(!file) return alert("Pilih file dulu")
-  const fileName = `${key}_${Date.now()}.jpg`
-  const { error } = await supabase.storage.from('banners').upload(fileName, file)
-  if(error) return alert("Gagal: " + error.message)
-  const { data } = supabase.storage.from('banners').getPublicUrl(fileName)
-  await supabase.from('setting').upsert({ key: key, value: data.publicUrl })
-  alert("Berhasil!")
-  loadSetting()
-}
-
-// HAPUS BANNER BARU
-async function hapusBanner(key){
-  if(!confirm('Yakin mau hapus banner ini?')) return
-  const { error } = await supabase.from('setting').delete().eq('key', key)
-  if(error){ alert('Gagal hapus: ' + error.message) } else {
-    alert('Banner dihapus')
-    document.getElementById('preview_' + key.split('_')[1]).style.display = 'none'
-  }
-}
-
-// LOAD SETTING SAAT BUKA HALAMAN
-async function loadSetting(){
-  const keys = ['banner_home', 'banner_menu', 'testi_1', 'testi_2', 'testi_3', 'tentang_kami']
-  for(let key of keys){
-    const { data } = await supabase.from('setting').select('value').eq('key', key).single()
-    if(data && data.value){
-      const id = 'preview_' + key.split('_')[1]
-      document.getElementById(id).src = data.value
-      document.getElementById(id).style.display = 'block'
+    <!DOCTYPE html>
+    <html lang="id">
+    <head>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - DEWAACAKE</title>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@400;600&display=swap');
+      body{font-family:'Poppins',sans-serif;background:#FFFFF0;padding:20px;margin:0}
+      h1,h2,h3{font-family:'Playfair Display',serif;color:#3E2F2F}
+   .box{background:#fff;border:2px solid #D4AF37;border-radius:12px;padding:20px;margin-bottom:20px}
+      input{width:100%;padding:10px;margin:8px 0;border:1px solid #ccc;border-radius:8px;box-sizing:border-box}
+      button{padding:10px 20px;background:#D4AF37;color:#fff;border:none;border-radius:8px;cursor:pointer;font-weight:600;margin:5px 5px 5px 0}
+      button:hover{opacity:0.9}
+   .btn-hapus{background:#e74c3c}.btn-edit{background:#3498db}
+   .produk-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:15px}
+   .produk-card{border:1px solid #eee;padding:10px;border-radius:8px;text-align:center;background:#fff}
+   .produk-card img{width:100%;height:140px;object-fit:cover;border-radius:8px;margin-bottom:8px}
+   .btn-group{display:flex;gap:5px;margin-top:10px}
+   .btn-group button{flex:1;padding:8px;font-size:12px}
+    #previewGambar{width:100px;height:100px;object-fit:cover;border-radius:8px;margin-top:10px;border:1px solid #ddd}
+   .banner-preview{margin-top:10px;text-align:center}
+   .banner-preview img{max-width:200px;border-radius:8px;border:1px solid #ddd}
+    </style>
+    </head>
+    <body>
+    <h1>Dashboard Admin DEWAACAKE</h1>
+    <div class="box">
+      <h2 id="formTitle">Tambah Produk Baru</h2>
+      <input id="idProduk" type="hidden">
+      <input id="namaProduk" placeholder="Nama Produk. Contoh: Kunafa Jeruk">
+      <input id="hargaProduk" placeholder="Harga. Contoh: 35000" type="number">
+      <label>Upload Gambar:</label>
+      <input id="uploadGambar" type="file" accept="image/*">
+      <img id="previewGambar" style="display:none">
+      <input id="gambarProduk" type="hidden">
+      <button onclick="simpanProduk()" id="btnSimpan">+ Simpan Produk</button>
+      <button onclick="batalEdit()" id="btnBatal" style="display:none;background:#95a5a6">Batal</button>
+    </div>
+    <hr style="margin:40px 0">
+    <h2>Setting Halaman</h2>
+    <div class="box">
+      <h3>Banner Homepage</h3>
+      <input type="file" id="uploadBannerHome" accept="image/*">
+      <button onclick="uploadBanner('banner_home', 'uploadBannerHome')">Upload</button>
+      <button class="btn-hapus" onclick="hapusBanner('banner_home')">Hapus</button>
+      <div class="banner-preview"><img id="preview_home" style="display:none;"></div>
+    </div>
+    <div class="box">
+      <h2>Daftar Produk</h2>
+      <div id="listProduk" class="produk-list">Loading...</div>
+    </div>
+    <script>
+    const SUPABASE_URL = 'https://ybfxqkwkbzgquhdazxwn.supabase.co'
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InliZnhxa3drYnpncXVoZGF6eHduIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc2Njc0OTIsImV4cCI6MjEwMzI0MzQ5Mn0.byXU-wZzhkCMaIohHd_obc5b7oWq5Vu9SkCUacEO9fE'
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY)
+    let modeEdit = false
+    document.getElementById('uploadGambar').addEventListener('change', async (e) => {
+      const file = e.target.files[0]
+      if(!file) return
+      const fileName = `produk-${Date.now()}-${file.name}`
+      await supabase.storage.from('produk').upload(fileName, file)
+      const { data: urlData } = supabase.storage.from('produk').getPublicUrl(fileName)
+      document.getElementById('gambarProduk').value = urlData.publicUrl
+      document.getElementById('previewGambar').src = urlData.publicUrl
+      document.getElementById('previewGambar').style.display = 'block'
+    })
+    async function simpanProduk(){
+      const id = document.getElementById('idProduk').value
+      const nama = document.getElementById('namaProduk').value.trim()
+      const harga = parseInt(document.getElementById('hargaProduk').value)
+      const gambar = document.getElementById('gambarProduk').value
+      if(!nama ||!harga ||!gambar){ alert('Lengkapi semua data!'); return }
+      if(modeEdit){ await supabase.from('produk').update({ nama, harga, gambar }).eq('id', id) }
+      else { await supabase.from('produk').insert([{ nama, harga, gambar }]) }
+      alert('Berhasil')
+      batalEdit()
+      loadProduk()
     }
-  }
-}
-
-loadProduk()
-loadSetting()
-</script>
-</body>
-</html>
+    async function loadProduk(){
+      const { data } = await supabase.from('produk').select('*').order('id', {ascending:false})
+      let html = ''
+      data.forEach(p=>{
+        html += `<div class="produk-card">
+          <img src="${p.gambar}">
+          <h4>${p.nama}</h4>
+          <p><b>Rp${p.harga.toLocaleString('id-ID')}</b></p>
+          <div class="btn-group">
+            <button class="btn-edit" onclick="editProduk(${p.id}, '${p.nama}', ${p.harga}, '${p.gambar}')">Edit</button>
+            <button class="btn-hapus" onclick="hapusProduk(${p.id})">Hapus</button>
+          </div>
+        </div>`
+      })
+      document.getElementById('listProduk').innerHTML = html || 'Belum ada produk'
+    }
+    function editProduk(id, nama, harga, gambar){ modeEdit = true; document.getElementById('formTitle').innerText = 'Edit Produk'; document.getElementById('btnSimpan').innerText = 'Update Produk'; document.getElementById('btnBatal').style.display = 'inline-block'; document.getElementById('idProduk').value = id; document.getElementById('namaProduk').value = nama; document.getElementById('hargaProduk').value = harga; document.getElementById('gambarProduk').value = gambar; document.getElementById('previewGambar').src = gambar; document.getElementById('previewGambar').style.display = 'block'; window.scrollTo(0,0) }
+    function batalEdit(){ modeEdit = false; document.getElementById('formTitle').innerText = 'Tambah Produk Baru'; document.getElementById('btnSimpan').innerText = '+ Simpan Produk'; document.getElementById('btnBatal').style.display = 'none'; document.getElementById('idProduk').value = ''; document.getElementById('namaProduk').value = ''; document.getElementById('hargaProduk').value = ''; document.getElementById('gambarProduk').value = ''; document.getElementById('uploadGambar').value = ''; document.getElementById('previewGambar').style.display = 'none' }
+    async function hapusProduk(id){
+      if(!confirm('Yakin mau hapus produk ini?')) return
+      await supabase.from('produk').delete().eq('id', id)
+      alert('Produk dihapus'); loadProduk()
+    }
+    async function uploadBanner(key, inputId) {
+      const file = document.getElementById(inputId).files[0]
+      if(!file) return alert("Pilih file dulu")
+      const fileName = `${key}_${Date.now()}.jpg`
+      const { error } = await supabase.storage.from('banners').upload(fileName, file)
+      if(error) return alert("Gagal: " + error.message)
+      const { data } = supabase.storage.from('banners').getPublicUrl(fileName)
+      await supabase.from('setting').upsert({ key: key, value: data.publicUrl })
+      alert("Berhasil!")
+      loadSetting()
+    }
+    async function hapusBanner(key){
+      if(!confirm('Yakin mau hapus banner ini?')) return
+      await supabase.from('setting').delete().eq('key', key)
+      alert('Banner dihapus')
+      document.getElementById('preview_' + key.split('_')[1]).style.display = 'none'
+    }
+    async function loadSetting(){
+      const { data } = await supabase.from('setting').select('value').eq('key', 'banner_home').single()
+      if(data && data.value){
+        document.getElementById('preview_home').src = data.value
+        document.getElementById('preview_home').style.display = 'block'
+      }
+    }
+    loadProduk()
+    loadSetting()
+    </script>
+    </body>
+    </html>
