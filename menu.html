@@ -136,7 +136,7 @@
 <div class="section" id="tentang">
   <h2>Tentang Kami</h2>
   <div class="profil">
-    <img id="tentang" src="Asset/Img/Tentang.jpg">
+    <img id="tentangImg" src="Asset/Img/Tentang.jpg">  <!-- UDAH DIGANTI ID NYA -->
     <div><h3>DEWAACAKE</h3><p>Semua berawal dari tahun 2019, dari sebuah dapur rumah yang sederhana dan aroma kue yang selalu memenuhi ruangan. Sampai jadi alasan tersenyum banyak orang hari ini.</p></div>
   </div>
 </div>
@@ -165,7 +165,6 @@
 <div class="footer"><h2>DEWAACAKE</h2><p>Copyright©2026<br>DevancaProject</p></div>
 
 <script>
-// SATU SCRIPT DOANG. PAKE NAMA db BIAR GA BENTROK
 const SUPABASE_URL = 'https://wcydigragsujlumtlxsb.supabase.co'
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndjeWRpZ3JhZ3N1amx1bXRseHNiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc3MzkzNjIsImV4cCI6MjEwMzMxNTM2Mn0.073ZiBOXltLikQqN7pyNBFinfkBwZTWIc5Gj7DV8Hp0'
 const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY)
@@ -216,7 +215,8 @@ function checkout(){
 }
 
 async function loadBanner(key, elementId, isBackground = false) {
-  const { data } = await db.from('setting').select('value').eq('key', key).single()
+  const { data, error } = await db.from('setting').select('value').eq('key', key).single()
+  if(error) console.error(key, error)
   if(data && data.value){
     if(isBackground){ document.getElementById(elementId).style.backgroundImage = `url('${data.value}')` }
     else { document.getElementById(elementId).src = data.value }
@@ -229,11 +229,7 @@ window.addEventListener('load', () => {
   loadBanner('testi_1', 'testi1')
   loadBanner('testi_2', 'testi2')
   loadBanner('testi_3', 'testi3')
-  
-  // INI TAMBAHAN BUAT PAKSA MUNCUL
-  setTimeout(() => {
-    document.getElementById('tentang').src = 'https://wcydigragsujlumtlxsb.supabase.co/storage/v1/object/public/Asset/tentang_kami-1787767211187-139098.jpg'
-  }, 1000)
+  loadBanner('tentang_kami', 'tentangImg') // <-- INI UDAH BENER
 })
 </script>
 </body>
