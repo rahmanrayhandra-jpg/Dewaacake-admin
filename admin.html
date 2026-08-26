@@ -22,6 +22,12 @@
   <button onclick="uploadBanner()">Upload Banner</button>
   <img id="bannerPreview" src="" style="display:none">
 </div>
+  <div class="card">
+  <h2>Upload Gambar Tentang Kami</h2>
+  <input type="file" id="tentangInput" accept="image/*">
+  <button onclick="uploadTentang()">Upload & Simpan</button>
+  <img id="tentangPreview" src="" style="max-width:200px; margin-top:10px; display:none">
+  </div>
 
 <div class="card">
   <h2>Tambah Produk</h2>
@@ -61,6 +67,34 @@ async function uploadBanner() {
   document.getElementById('bannerPreview').src = publicUrl
   document.getElementById('bannerPreview').style.display = 'block'
   alert('Banner berhasil diupload!')
+}
+  // TAMPILIN GAMBAR LAMA
+async function loadTentang() {
+  const { data } = await supabase.from('setting').select('value').eq('key','tentang_kami').single()
+  if(data) {
+    document.getElementById('tentangPreview').src = data.value
+    document.getElementById('tentangPreview').style.display = 'block'
+  }
+}
+loadTentang()
+
+// UPLOAD GAMBAR TENTANG KAMI
+async function uploadTentang() {
+  const file = document.getElementById('tentangInput').files[0]
+  if(!file) return alert('Pilih gambar dulu')
+  
+  const fileName = `tentang-${Date.now()}.jpg`
+  const { error: upErr } = await supabase.storage.from('Asset').upload(fileName, file)
+  if(upErr) return alert('Gagal upload: ' + upErr.message)
+  
+  const { data: { publicUrl } = supabase.storage.from('Asset').getPublicUrl(fileName)
+  
+  const { error: dbErr } = await supabase.from('setting').upsert({ key: 'tentang_kami', value: publicUrl })
+  if(dbErr) return alert('Gagal simpan: ' + dbErr.message)
+  
+  document.getElementById('tentangPreview').src = publicUrl
+  document.getElementById('tentangPreview').style.display = 'block'
+  alert('Gambar Tentang Kami berhasil diupload!')
 }
 
 // TAMBAH PRODUK
