@@ -229,7 +229,11 @@ window.addEventListener('load', () => {
   loadBanner('testi_1', 'testi1')
   loadBanner('testi_2', 'testi2')
   loadBanner('testi_3', 'testi3')
-  loadBanner('tentang_kami', 'tentang')
+  
+  // INI TAMBAHAN BUAT PAKSA MUNCUL
+  setTimeout(() => {
+    document.getElementById('tentang').src = 'https://wcydigragsujlumtlxsb.supabase.co/storage/v1/object/public/Asset/tentang_kami-1787767211187-139098.jpg'
+  }, 1000)
 })
 </script>
 </body>
