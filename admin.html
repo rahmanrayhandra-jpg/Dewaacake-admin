@@ -96,9 +96,9 @@ async function uploadDanSimpan(key, inputId, previewId){
   const file = document.getElementById(inputId).files[0]
   if(!file){alert('Pilih file dulu');return}
   const fileName = `${key}-${Date.now()}-${file.name}`
-  const { error: upErr } = await db.storage.from('Asset').upload(fileName, file) // <-- UDAH DIBETULIN
+  const { error: upErr } = await db.storage.from('Asset').upload(fileName, file)
   if(upErr){ alert('Upload gagal: '+upErr.message); return }
-  const { data: {publicUrl} } = db.storage.from('Asset').getPublicUrl(fileName) // <-- UDAH DIBETULIN
+  const { data: {publicUrl} } = db.storage.from('Asset').getPublicUrl(fileName)
 
   const { error } = await db.from('setting').upsert({key, value: publicUrl})
   if(error){ alert('Gagal simpan: '+error.message) }
@@ -112,9 +112,9 @@ async function uploadDanSimpan(key, inputId, previewId){
 document.getElementById('uploadGambar').addEventListener('change', async (e) => {
   const file = e.target.files[0]; if(!file) return
   const fileName = `produk-${Date.now()}-${file.name}`
-  const { error } = await db.storage.from('Asset').upload(fileName, file) // <-- UDAH DIBETULIN
+  const { error } = await db.storage.from('Asset').upload(fileName, file)
   if(!error){
-    const { data: {publicUrl} } = db.storage.from('Asset').getPublicUrl(fileName) // <-- UDAH DIBETULIN
+    const { data: {publicUrl} } = db.storage.from('Asset').getPublicUrl(fileName)
     document.getElementById('gambarProduk').value = publicUrl
     document.getElementById('previewGambar').src = publicUrl
     document.getElementById('previewGambar').style.display = 'block'
@@ -129,7 +129,7 @@ async function simpanProduk(){
   if(!nama ||!harga ||!gambar){ alert('Lengkapi semua data!'); return }
 
   let { error } = modeEdit
- ? await db.from('produk').update({ nama, harga, gambar }).eq('id', id)
+? await db.from('produk').update({ nama, harga, gambar }).eq('id', id)
     : await db.from('produk').insert([{ nama, harga, gambar }])
 
   document.getElementById('msgProduk').innerText = error? 'Gagal: '+error.message : 'Berhasil!'
