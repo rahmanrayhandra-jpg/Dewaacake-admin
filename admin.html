@@ -1,117 +1,156 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Admin Panel</title>
-  <link rel="stylesheet" href="Asset/css/style.css">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin - DEWAACAKE</title>
 <style>
-  body { font-family: Arial; padding: 20px; background: #f5f5f5; }
- .card { background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; }
-  input, button { padding: 10px; margin: 5px 0; width: 100%; box-sizing: border-box; }
-  button { background: #d97706; color: white; border: none; cursor: pointer; border-radius: 5px; }
-  img { max-width: 200px; margin-top: 10px; border-radius: 5px; }
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@400;600&display=swap');
+  body{font-family:'Poppins',sans-serif;background:#FFFFF0;padding:20px;margin:0}
+  h1,h2{font-family:'Playfair Display',serif;color:#3E2F2F}
+.box{background:#fff;border:2px solid #D4AF37;border-radius:12px;padding:20px;margin-bottom:20px}
+  input,textarea{width:100%;padding:10px;margin:8px 0;border:1px solid #ccc;border-radius:8px;box-sizing:border-box}
+  button{padding:10px 20px;background:#D4AF37;color:#fff;border:none;border-radius:8px;cursor:pointer;font-weight:600;margin:5px}
+.btn-hapus{background:#e74c3c}.btn-edit{background:#3498db}
+.produk-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:15px}
+.produk-card{border:1px solid #eee;padding:10px;border-radius:8px;text-align:center;background:#fff}
+.produk-card img{width:100%;height:140px;object-fit:cover;border-radius:8px}
+.btn-group{display:flex;gap:5px;margin-top:10px}
+.btn-group button{flex:1;padding:8px;font-size:12px}
+.banner-preview{width:100%;max-height:150px;object-fit:cover;border-radius:8px;margin-top:10px}
+.msg{font-size:12px;margin-top:5px;color:#27ae60}
+.msg.error{color:#e74c3c}
 </style>
 </head>
 <body>
-<h1>Admin Panel</h1>
 
-<div class="card">
-  <h2>Upload Banner Menu</h2>
-  <input type="file" id="bannerInput" accept="image/*">
-  <button onclick="uploadBanner()">Upload Banner</button>
-  <img id="bannerPreview" src="" style="display:none">
+<h1>Dashboard Admin DEWAACAKE</h1>
+
+<div class="box">
+  <h2>1. Banner Utama</h2>
+  <img id="bannerPreview" class="banner-preview">
+  <input id="uploadBanner" type="file" accept="image/*">
+  <button onclick="uploadDanSimpan('banner_menu', 'uploadBanner', 'bannerPreview')">Upload & Simpan Banner</button>
+  <p id="msgBanner" class="msg"></p>
 </div>
-  <div class="card">
-  <h2>Upload Gambar Tentang Kami</h2>
-  <input type="file" id="tentangInput" accept="image/*">
-  <button onclick="uploadTentang()">Upload & Simpan</button>
-  <img id="tentangPreview" src="" style="max-width:200px; margin-top:10px; display:none">
-  </div>
 
-<div class="card">
-  <h2>Tambah Produk</h2>
-  <input type="text" id="nama" placeholder="Nama Produk">
-  <input type="text" id="harga" placeholder="Harga">
-  <input type="file" id="produkImg" accept="image/*">
-  <button onclick="tambahProduk()">Simpan Produk</button>
+<div class="box">
+  <h2>2. Foto Testimoni</h2>
+  <div style="display:flex;gap:10px;flex-wrap:wrap">
+    <div><p>Testi 1</p><img id="testi1Preview" class="banner-preview" style="max-width:100px"><input type="file" id="uploadTesti1" accept="image/*"><button onclick="uploadDanSimpan('testi_1', 'uploadTesti1', 'testi1Preview')">Simpan</button></div>
+    <div><p>Testi 2</p><img id="testi2Preview" class="banner-preview" style="max-width:100px"><input type="file" id="uploadTesti2" accept="image/*"><button onclick="uploadDanSimpan('testi_2', 'uploadTesti2', 'testi2Preview')">Simpan</button></div>
+    <div><p>Testi 3</p><img id="testi3Preview" class="banner-preview" style="max-width:100px"><input type="file" id="uploadTesti3" accept="image/*"><button onclick="uploadDanSimpan('testi_3', 'uploadTesti3', 'testi3Preview')">Simpan</button></div>
+  </div>
+</div>
+
+<div class="box">
+  <h2>3. Foto Tentang Kami</h2>
+  <img id="tentangPreview" class="banner-preview" style="max-width:200px">
+  <input id="uploadTentang" type="file" accept="image/*">
+  <button onclick="uploadDanSimpan('tentang_kami', 'uploadTentang', 'tentangPreview')">Upload & Simpan</button>
+</div>
+
+<div class="box">
+  <h2 id="formTitle">4. Tambah Produk Baru</h2>
+  <input id="idProduk" type="hidden">
+  <input id="namaProduk" placeholder="Nama Produk">
+  <input id="hargaProduk" placeholder="Harga" type="number">
+  <input id="uploadGambar" type="file" accept="image/*">
+  <img id="previewGambar" style="display:none;width:100px;height:100px;object-fit:cover;border-radius:8px;margin-top:10px">
+  <input id="gambarProduk" type="hidden">
+  <button onclick="simpanProduk()" id="btnSimpan">+ Simpan Produk</button>
+  <button onclick="batalEdit()" id="btnBatal" style="display:none;background:#95a5a6">Batal</button>
+  <p id="msgProduk" class="msg"></p>
+</div>
+
+<div class="box">
+  <h2>Daftar Produk</h2>
+  <div id="listProduk" class="produk-list">Loading...</div>
 </div>
 
 <script>
-const SUPABASE_URL = "https://wcydigragsujlumtlxsb.supabase.co"
-const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndjeWRpZ3JhZ3N1amx1bXRseHNiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc3MzkzNjIsImV4cCI6MjEwMzMxNTM2Mn0.073ZiBOXltLikQqN7pyNBFinfkBwZTWIc5Gj7DV8Hp0"
-const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY)
+const SUPABASE_URL = 'https://wcydigragsujlumtlxsb.supabase.co'
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndjeWRpZ3JhZ3N1amx1bXRseHNiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc3MzkzNjIsImV4cCI6MjEwMzMxNTM2Mn0.073ZiBOXltLikQqN7pyNBFinfkBwZTWIc5Gj7DV8Hp0'
+const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY)
 
-// TAMPILIN BANNER LAMA PAS BUKA HALAMAN
-async function loadBanner() {
-  const { data } = await supabase.from('setting').select('value').eq('key','banner_menu').single()
-  if(data) document.getElementById('bannerPreview').src = data.value
-}
-loadBanner()
+let modeEdit = false
+let produkEdit = {}
 
-// UPLOAD BANNER
-async function uploadBanner() {
-  const file = document.getElementById('bannerInput').files[0]
-  if(!file) return alert('Pilih gambar dulu')
-  
-  const fileName = `banner-${Date.now()}.jpg`
-  const { error: upErr } = await supabase.storage.from('Asset').upload(fileName, file)
-  if(upErr) return alert('Gagal upload: ' + upErr.message)
-  
-  const { data: { publicUrl } } = supabase.storage.from('Asset').getPublicUrl(fileName)
-  
-  // SIMPAN LINK KE TABEL SETTING
-  const { error: dbErr } = await supabase.from('setting').upsert({ key: 'banner_menu', value: publicUrl })
-  if(dbErr) return alert('Gagal simpan link: ' + dbErr.message)
-  
-  document.getElementById('bannerPreview').src = publicUrl
-  document.getElementById('bannerPreview').style.display = 'block'
-  alert('Banner berhasil diupload!')
+loadSemua()
+
+async function loadSemua(){
+  await loadBanner('banner_menu', 'bannerPreview')
+  await loadBanner('testi_1', 'testi1Preview')
+  await loadBanner('testi_2', 'testi2Preview')
+  await loadBanner('testi_3', 'testi3Preview')
+  await loadBanner('tentang_kami', 'tentangPreview')
+  await loadProduk()
 }
-  // TAMPILIN GAMBAR LAMA
-async function loadTentang() {
-  const { data } = await supabase.from('setting').select('value').eq('key','tentang_kami').single()
-  if(data) {
-    document.getElementById('tentangPreview').src = data.value
-    document.getElementById('tentangPreview').style.display = 'block'
+
+async function loadBanner(key, elementId){
+  const { data } = await db.from('setting').select('value').eq('key', key).single()
+  if(data?.value){ document.getElementById(elementId).src = data.value }
+}
+
+async function uploadDanSimpan(key, inputId, previewId){
+  const file = document.getElementById(inputId).files[0]
+  if(!file){alert('Pilih file dulu');return}
+  const fileName = `${key}-${Date.now()}-${file.name}`
+  const { error: upErr } = await db.storage.from('Asset').upload(fileName, file)
+  if(upErr){ alert('Upload gagal: '+upErr.message); return }
+  const { data: {publicUrl} } = db.storage.from('Asset').getPublicUrl(fileName)
+
+  const { error } = await db.from('setting').upsert({key, value: publicUrl})
+  if(error){ alert('Gagal simpan: '+error.message) }
+  else{
+    document.getElementById(previewId).src = publicUrl
+    document.getElementById('msgBanner').innerText = 'Berhasil disimpan!'
+    setTimeout(()=>document.getElementById('msgBanner').innerText='',2000)
   }
 }
-loadTentang()
 
-// UPLOAD GAMBAR TENTANG KAMI
-async function uploadTentang() {
-  const file = document.getElementById('tentangInput').files[0]
-  if(!file) return alert('Pilih gambar dulu')
-  
-  const fileName = `tentang-${Date.now()}.jpg`
-  const { error: upErr } = await supabase.storage.from('Asset').upload(fileName, file)
-  if(upErr) return alert('Gagal upload: ' + upErr.message)
-  
-  const { data: { publicUrl } = supabase.storage.from('Asset').getPublicUrl(fileName)
-  
-  const { error: dbErr } = await supabase.from('setting').upsert({ key: 'tentang_kami', value: publicUrl })
-  if(dbErr) return alert('Gagal simpan: ' + dbErr.message)
-  
-  document.getElementById('tentangPreview').src = publicUrl
-  document.getElementById('tentangPreview').style.display = 'block'
-  alert('Gambar Tentang Kami berhasil diupload!')
+document.getElementById('uploadGambar').addEventListener('change', async (e) => {
+  const file = e.target.files[0]; if(!file) return
+  const fileName = `produk-${Date.now()}-${file.name}`
+  const { error } = await db.storage.from('Asset').upload(fileName, file)
+  if(!error){
+    const { data: {publicUrl} } = db.storage.from('Asset').getPublicUrl(fileName)
+    document.getElementById('gambarProduk').value = publicUrl
+    document.getElementById('previewGambar').src = publicUrl
+    document.getElementById('previewGambar').style.display = 'block'
+  } else { alert('Upload gagal: ' + error.message) }
+})
+
+async function simpanProduk(){
+  const id = document.getElementById('idProduk').value
+  const nama = document.getElementById('namaProduk').value.trim()
+  const harga = parseInt(document.getElementById('hargaProduk').value)
+  const gambar = document.getElementById('gambarProduk').value
+  if(!nama ||!harga ||!gambar){ alert('Lengkapi semua data!'); return }
+
+  let { error } = modeEdit
+? await db.from('produk').update({ nama, harga, gambar }).eq('id', id)
+    : await db.from('produk').insert([{ nama, harga, gambar }])
+
+  document.getElementById('msgProduk').innerText = error? 'Gagal: '+error.message : 'Berhasil!'
+  document.getElementById('msgProduk').className = error? 'msg error' : 'msg'
+  if(!error){ batalEdit(); loadProduk() }
 }
 
-// TAMBAH PRODUK
-async function tambahProduk() {
-  const nama = document.getElementById('nama').value
-  const harga = document.getElementById('harga').value
-  const file = document.getElementById('produkImg').files[0]
-  if(!nama ||!harga ||!file) return alert('Lengkapi semua')
-  
-  const fileName = `produk-${Date.now()}.jpg`
-  await supabase.storage.from('Asset').upload(fileName, file)
-  const { data: { publicUrl } } = supabase.storage.from('Asset').getPublicUrl(fileName)
-  
-  await supabase.from('produk').insert({ nama, harga, gambar: publicUrl })
-  alert('Produk berhasil ditambah!')
+async function loadProduk(){
+  const { data, error } = await db.from('produk').select('*').order('id', {ascending:false})
+  if(error){ document.getElementById('listProduk').innerHTML = `<p class="msg error">Error: ${error.message}</p>`; return }
+  let html = ''
+  data.forEach(p=>{
+    produkEdit[p.id] = p
+    html += `<div class="produk-card"><img src="${p.gambar}"><h4>${p.nama}</h4><p><b>Rp${p.harga.toLocaleString('id-ID')}</b></p><div class="btn-group"><button class="btn-edit" onclick="editProduk(${p.id})">Edit</button><button class="btn-hapus" onclick="hapusProduk(${p.id})">Hapus</button></div></div>`
+  })
+  document.getElementById('listProduk').innerHTML = html || 'Belum ada produk'
 }
+
+function editProduk(id){ const p = produkEdit[id]; modeEdit = true; document.getElementById('formTitle').innerText = 'Edit Produk'; document.getElementById('btnSimpan').innerText = 'Update Produk'; document.getElementById('btnBatal').style.display = 'inline-block'; document.getElementById('idProduk').value = p.id; document.getElementById('namaProduk').value = p.nama; document.getElementById('hargaProduk').value = p.harga; document.getElementById('gambarProduk').value = p.gambar; document.getElementById('previewGambar').src = p.gambar; document.getElementById('previewGambar').style.display = 'block'; window.scrollTo(0,0) }
+function batalEdit(){ modeEdit = false; document.getElementById('formTitle').innerText = 'Tambah Produk Baru'; document.getElementById('btnSimpan').innerText = '+ Simpan Produk'; document.getElementById('btnBatal').style.display = 'none'; document.getElementById('idProduk').value = ''; document.getElementById('namaProduk').value = ''; document.getElementById('hargaProduk').value = ''; document.getElementById('gambarProduk').value = ''; document.getElementById('uploadGambar').value = ''; document.getElementById('previewGambar').style.display = 'none'; document.getElementById('msgProduk').innerText = '' }
+async function hapusProduk(id){ if(!confirm('Yakin mau hapus?')) return; await db.from('produk').delete().eq('id', id); loadProduk() }
 </script>
 </body>
 </html>
