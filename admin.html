@@ -8,18 +8,18 @@
   @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@400;600&display=swap');
   body{font-family:'Poppins',sans-serif;background:#FFFFF0;padding:20px;margin:0}
   h1,h2{font-family:'Playfair Display',serif;color:#3E2F2F}
- .box{background:#fff;border:2px solid #D4AF37;border-radius:12px;padding:20px;margin-bottom:20px}
+.box{background:#fff;border:2px solid #D4AF37;border-radius:12px;padding:20px;margin-bottom:20px}
   input,textarea{width:100%;padding:10px;margin:8px 0;border:1px solid #ccc;border-radius:8px;box-sizing:border-box}
   button{padding:10px 20px;background:#D4AF37;color:#fff;border:none;border-radius:8px;cursor:pointer;font-weight:600;margin:5px}
- .btn-hapus{background:#e74c3c}.btn-edit{background:#3498db}
- .produk-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:15px}
- .produk-card{border:1px solid #eee;padding:10px;border-radius:8px;text-align:center;background:#fff}
- .produk-card img{width:100%;height:140px;object-fit:cover;border-radius:8px}
- .btn-group{display:flex;gap:5px;margin-top:10px}
- .btn-group button{flex:1;padding:8px;font-size:12px}
- .banner-preview{width:100%;max-height:150px;object-fit:cover;border-radius:8px;margin-top:10px}
- .msg{font-size:12px;margin-top:5px;color:#27ae60}
- .msg.error{color:#e74c3c}
+.btn-hapus{background:#e74c3c}.btn-edit{background:#3498db}
+.produk-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:15px}
+.produk-card{border:1px solid #eee;padding:10px;border-radius:8px;text-align:center;background:#fff}
+.produk-card img{width:100%;height:140px;object-fit:cover;border-radius:8px}
+.btn-group{display:flex;gap:5px;margin-top:10px}
+.btn-group button{flex:1;padding:8px;font-size:12px}
+.banner-preview{width:100%;max-height:150px;object-fit:cover;border-radius:8px;margin-top:10px}
+.msg{font-size:12px;margin-top:5px;color:#27ae60}
+.msg.error{color:#e74c3c}
 </style>
 </head>
 <body>
@@ -96,9 +96,9 @@ async function uploadDanSimpan(key, inputId, previewId){
   const file = document.getElementById(inputId).files[0]
   if(!file){alert('Pilih file dulu');return}
   const fileName = `${key}-${Date.now()}-${file.name}`
-  const { error: upErr } = await db.storage.from('Assets').upload(fileName, file)
+  const { error: upErr } = await db.storage.from('Asset').upload(fileName, file) // <-- UDAH DIBETULIN
   if(upErr){ alert('Upload gagal: '+upErr.message); return }
-  const { data: {publicUrl} } = db.storage.from('Assets').getPublicUrl(fileName)
+  const { data: {publicUrl} } = db.storage.from('Asset').getPublicUrl(fileName) // <-- UDAH DIBETULIN
 
   const { error } = await db.from('setting').upsert({key, value: publicUrl})
   if(error){ alert('Gagal simpan: '+error.message) }
@@ -112,9 +112,9 @@ async function uploadDanSimpan(key, inputId, previewId){
 document.getElementById('uploadGambar').addEventListener('change', async (e) => {
   const file = e.target.files[0]; if(!file) return
   const fileName = `produk-${Date.now()}-${file.name}`
-  const { error } = await db.storage.from('Assets').upload(fileName, file)
+  const { error } = await db.storage.from('Asset').upload(fileName, file) // <-- UDAH DIBETULIN
   if(!error){
-    const { data: {publicUrl} } = db.storage.from('Assets').getPublicUrl(fileName)
+    const { data: {publicUrl} } = db.storage.from('Asset').getPublicUrl(fileName) // <-- UDAH DIBETULIN
     document.getElementById('gambarProduk').value = publicUrl
     document.getElementById('previewGambar').src = publicUrl
     document.getElementById('previewGambar').style.display = 'block'
@@ -129,7 +129,7 @@ async function simpanProduk(){
   if(!nama ||!harga ||!gambar){ alert('Lengkapi semua data!'); return }
 
   let { error } = modeEdit
-  ? await db.from('produk').update({ nama, harga, gambar }).eq('id', id)
+ ? await db.from('produk').update({ nama, harga, gambar }).eq('id', id)
     : await db.from('produk').insert([{ nama, harga, gambar }])
 
   document.getElementById('msgProduk').innerText = error? 'Gagal: '+error.message : 'Berhasil!'
