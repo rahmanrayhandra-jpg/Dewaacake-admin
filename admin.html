@@ -96,9 +96,9 @@ async function uploadDanSimpan(key, inputId, previewId){
   const file = document.getElementById(inputId).files[0]
   if(!file){alert('Pilih file dulu');return}
   const fileName = `${key}-${Date.now()}-${file.name}`
-  const { error: upErr } = await db.storage.from('assets').upload(fileName, file)
+  const { error: upErr } = await db.storage.from('Assets').upload(fileName, file)
   if(upErr){ alert('Upload gagal: '+upErr.message); return }
-  const { data: {publicUrl} } = db.storage.from('assets').getPublicUrl(fileName)
+  const { data: {publicUrl} } = db.storage.from('Assets').getPublicUrl(fileName)
 
   const { error } = await db.from('setting').upsert({key, value: publicUrl})
   if(error){ alert('Gagal simpan: '+error.message) }
@@ -112,9 +112,9 @@ async function uploadDanSimpan(key, inputId, previewId){
 document.getElementById('uploadGambar').addEventListener('change', async (e) => {
   const file = e.target.files[0]; if(!file) return
   const fileName = `produk-${Date.now()}-${file.name}`
-  const { error } = await db.storage.from('assets').upload(fileName, file)
+  const { error } = await db.storage.from('Assets').upload(fileName, file)
   if(!error){
-    const { data: {publicUrl} } = db.storage.from('assets').getPublicUrl(fileName)
+    const { data: {publicUrl} } = db.storage.from('Assets').getPublicUrl(fileName)
     document.getElementById('gambarProduk').value = publicUrl
     document.getElementById('previewGambar').src = publicUrl
     document.getElementById('previewGambar').style.display = 'block'
