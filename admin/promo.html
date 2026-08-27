@@ -1,21 +1,136 @@
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manajemen Promo - Dewa A Cake</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 p-6">
+
+  <div class="max-w-5xl mx-auto">
+    <h1 class="text-2xl font-bold mb-4">🎟️ Manajemen Promo</h1>
+
+    <!-- FORM TAMBAH/EDIT -->
+    <div class="bg-white p-4 rounded-lg shadow mb-6">
+      <h2 class="font-semibold mb-3" id="form-title">Tambah Promo Baru</h2>
+      <input type="hidden" id="promo-id">
+      <div class="grid grid-cols-2 gap-3">
+        <input id="kode" placeholder="KODEPROMO" class="border p-2 rounded">
+        <input id="nama" placeholder="Nama Promo" class="border p-2 rounded">
+        <input id="percent" type="number" placeholder="Diskon % " class="border p-2 rounded">
+        <input id="nominal" type="number" placeholder="Diskon Rp" class="border p-2 rounded">
+        <input id="min" type="number" placeholder="Min Belanja" class="border p-2 rounded">
+        <input id="sampai" type="date" class="border p-2 rounded">
+        <select id="status" class="border p-2 rounded">
+          <option value="aktif">Aktif</option>
+          <option value="nonaktif">Nonaktif</option>
+        </select>
+      </div>
+      <button onclick="simpanPromo()" class="bg-blue-600 text-white px-4 py-2 rounded mt-3">Simpan</button>
+      <button onclick="resetForm()" class="bg-gray-400 text-white px-4 py-2 rounded mt-3">Batal</button>
+    </div>
+
+    <!-- TABEL DATA -->
+    <div class="bg-white p-4 rounded-lg shadow">
+      <table class="w-full">
+        <thead>
+          <tr class="border-b">
+            <th class="p-2 text-left">Kode</th>
+            <th class="p-2 text-left">Nama</th>
+            <th class="p-2 text-left">Diskon</th>
+            <th class="p-2 text-left">Sampai</th>
+            <th class="p-2 text-left">Status</th>
+            <th class="p-2 text-left">Aksi</th>
+          </tr>
+        </thead>
+        <tbody id="tabel-promo"></tbody>
+      </table>
+    </div>
+  </div>
+
 <script>
-const supabaseUrl = 'https://wcydigragsujlumtlxsb.supabase.co'
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndjeWRpZ3JhZ3N1amx1bXRseHNiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc3MzkzNjIsImV4cCI6MjEwMzMxNTM2Mn0.073ZiBOXltLikQqN7pyNBFinfkBwZTWIc5Gj7DV8Hp0'
-const supabase = createClient(supabaseUrl, supabaseKey)
+  // GANTI INI PAKE PUNYA KAMU
+  const supabaseUrl = 'https://wcydigragsujlumtlxsb.supabase.co'
+  const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndjeWRpZ3JhZ3N1amx1bXRseHNiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc3MzkzNjIsImV4cCI6MjEwMzMxNTM2Mn0.073ZiBOXltLikQqN7pyNBFinfkBwZTWIc5Gj7DV8Hp0'
+  const supabase = createClient(supabaseUrl, supabaseKey)
 
-// TAMPILIN DATA
-async function loadPromo() {
-  const { data } = await supabase.from('promo').select('*').order('id', {ascending: false})
-  // loop data masukin ke table
-}
+  let editingId = null;
 
-// TAMBAH DATA
-async function tambahPromo() {
-  await supabase.from('promo').insert([{ 
-    kode_promo: 'DEWA10', 
-    nama_promo: 'Diskon 10%',
-    diskon_percent: 10 
-  }])
-}
+  // LOAD DATA
+  async function loadPromo() {
+    const { data } = await supabase.from('promo').select('*').order('id', {ascending: false})
+    const tbody = document.getElementById('tabel-promo')
+    tbody.innerHTML = ''
+    data.forEach(p => {
+      const diskon = p.diskon_percent? p.diskon_percent + '%' : 'Rp' + p.diskon_nominal
+      tbody.innerHTML += `
+        <tr class="border-b">
+          <td class="p-2 font-bold">${p.kode_promo}</td>
+          <td class="p-2">${p.nama_promo}</td>
+          <td class="p-2">${diskon}</td>
+          <td class="p-2">${p.berlaku_sampai || '-'}</td>
+          <td class="p-2">${p.status}</td>
+          <td class="p-2">
+            <button onclick='editPromo(${JSON.stringify(p)})' class="text-blue-500">Edit</button>
+            <button onclick='hapusPromo(${p.id})' class="text-red-500 ml-2">Hapus</button>
+          </td>
+        </tr>
+      `
+    })
+  }
+
+  // SIMPAN
+  async function simpanPromo() {
+    const payload = {
+      kode_promo: document.getElementById('kode').value,
+      nama_promo: document.getElementById('nama').value,
+      diskon_percent: document.getElementById('percent').value || null,
+      diskon_nominal: document.getElementById('nominal').value || null,
+      minimal_belanja: document.getElementById('min').value || 0,
+      berlaku_sampai: document.getElementById('sampai').value || null,
+      status: document.getElementById('status').value
+    }
+
+    if(editingId) {
+      await supabase.from('promo').update(payload).eq('id', editingId)
+    } else {
+      await supabase.from('promo').insert([payload])
+    }
+    resetForm()
+    loadPromo()
+  }
+
+  // EDIT
+  function editPromo(p) {
+    editingId = p.id
+    document.getElementById('form-title').innerText = 'Edit Promo'
+    document.getElementById('kode').value = p.kode_promo
+    document.getElementById('nama').value = p.nama_promo
+    document.getElementById('percent').value = p.diskon_percent
+    document.getElementById('nominal').value = p.diskon_nominal
+    document.getElementById('min').value = p.minimal_belanja
+    document.getElementById('sampai').value = p.berlaku_sampai
+    document.getElementById('status').value = p.status
+  }
+
+  // HAPUS
+  async function hapusPromo(id) {
+    if(confirm('Yakin hapus?')) {
+      await supabase.from('promo').delete().eq('id', id)
+      loadPromo()
+    }
+  }
+
+  function resetForm() {
+    editingId = null
+    document.getElementById('form-title').innerText = 'Tambah Promo Baru'
+    document.querySelectorAll('input').forEach(i => i.value = '')
+    document.getElementById('status').value = 'aktif'
+  }
+
+  loadPromo()
 </script>
+</body>
+</html>
