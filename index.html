@@ -1,24 +1,59 @@
-<style>
-  .hero { 
-    height: 100vh; 
-    background-color: #FDF6E3;
-    background-image: url('Brand.jpg'); /* TAMBAHIN INI */
-    background-position: center;
-    background-size: cover; 
-    background-repeat: no-repeat;
-    display:flex; 
-    align-items:flex-end; 
-    justify-content:center; 
-    padding-bottom:60px; 
-  }
-</style>
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DEWAACAKE - Homemade With Love</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+    body { background: #FDF6E3; }
+
+    .hero { 
+      min-height: 100vh; /* full 1 layar */
+      background-color: #FDF6E3;
+      background-image: url('public/banner-dewaa.jpg'); /* ganti nama file kamu */
+      background-position: center top; 
+      background-size: contain; /* biar gambar utuh ga kepotong */
+      background-repeat: no-repeat;
+      display: flex; 
+      flex-direction: column; 
+      align-items: center; 
+      justify-content: flex-end; /* tombol di bawah */
+      text-align: center;
+      padding-bottom: 80px; /* jarak tombol dari bawah */
+    }
+
+    .btn-menu {
+      background: #8B4513; /* coklat */
+      color: #fff;
+      padding: 16px 40px;
+      border-radius: 50px;
+      font-weight: 700;
+      font-size: 18px;
+      text-decoration: none;
+      transition: all 0.3s ease; 
+      box-shadow: 0 6px 20px rgba(139, 69, 19, 0.4);
+      letter-spacing: 1px;
+    }
+    .btn-menu:hover {
+      background: #A0522D;
+      transform: translateY(-4px); /* efek naik */
+      box-shadow: 0 8px 25px rgba(139, 69, 19, 0.5);
+    }
+
+    /* Buat HP kecil */
+    @media (max-width: 480px) {
+      .hero { padding-bottom: 60px; }
+      .btn-menu { font-size: 16px; padding: 14px 32px; }
+    }
+  </style>
+</head>
 <body>
   <section class="hero" id="banner_home">
     <a href="menu.html" class="btn-menu">Let's the cake</a>
   </section>
 
-<script>
-  // HAPUS SEMUA SCRIPT SUPABASE BUAT BANNER DULU
-  // Biarin kosong. Nanti kita pake lagi
-</script>
+  <!-- Script Supabase buat banner dihapus dulu -->
+  <script></script>
 </body>
+</html>
