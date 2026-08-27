@@ -9,22 +9,23 @@
     body { background: #FDF6E3; }
 
     .hero { 
-      min-height: 100vh; /* full 1 layar */
+      position: relative; /* INI PENTING */
+      min-height: 100vh; 
       background-color: #FDF6E3;
-      background-image: url('Brand.jpg'); /* ganti nama file kamu */
+      background-image: url('public/banner-dewaa.jpg'); 
       background-position: center top; 
-      background-size: contain; /* biar gambar utuh ga kepotong */
+      background-size: contain; 
       background-repeat: no-repeat;
       display: flex; 
-      flex-direction: column; 
-      align-items: center; 
-      justify-content: flex-end; /* tombol di bawah */
-      text-align: center;
-      padding-bottom: 40px; /* jarak tombol dari bawah */
     }
 
     .btn-menu {
-      background: #8B4513; /* coklat */
+      position: absolute; /* INI KUNCINYA */
+      bottom: 25%; /* Atur naik turunnya dari sini. 25% = 25% dari bawah layar */
+      left: 50%;
+      transform: translateX(-50%); /* biar pas di tengah */
+      
+      background: #8B4513; 
       color: #fff;
       padding: 16px 40px;
       border-radius: 50px;
@@ -37,14 +38,8 @@
     }
     .btn-menu:hover {
       background: #A0522D;
-      transform: translateY(-4px); /* efek naik */
+      transform: translateX(-50%) translateY(-4px); /* efek naik */
       box-shadow: 0 8px 25px rgba(139, 69, 19, 0.5);
-    }
-
-    /* Buat HP kecil */
-    @media (max-width: 480px) {
-      .hero { padding-bottom: 60px; }
-      .btn-menu { font-size: 16px; padding: 14px 32px; }
     }
   </style>
 </head>
@@ -52,8 +47,5 @@
   <section class="hero" id="banner_home">
     <a href="menu.html" class="btn-menu">Let's the cake</a>
   </section>
-
-  <!-- Script Supabase buat banner dihapus dulu -->
-  <script></script>
 </body>
 </html>
