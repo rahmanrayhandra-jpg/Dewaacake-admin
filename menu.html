@@ -37,6 +37,26 @@
   .logo {display: flex;align-items: center;gap: 12px;text-decoration: none;}
   .logo-icon {width: 40px;height: 40px;}
   .logo span {font-family: 'Playfair Display', serif;font-size: 22px;font-weight: 600;letter-spacing: 3px;color: #3E2F2F;}
+  
+  /* SLIDER PRODUK BARU */
+  .produk-slider {
+    display: flex;
+    gap: 16px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    padding: 10px 4px 20px 4px;
+    -webkit-overflow-scrolling: touch;
+  }
+  .produk-slider::-webkit-scrollbar { display: none; }
+  .produk-slider .card {
+    min-width: 260px;
+    flex-shrink: 0;
+    scroll-snap-align: start;
+  }
+  @media (min-width: 768px){
+    .produk-slider .card { min-width: 300px; }
+  }
+
   @media (max-width: 768px) {
     nav{padding:15px 6%}.hero-text h1{font-size:30px}.hero{height:60vh}.section{padding:50px 6%} nav a{margin-left:10px;font-size:14px}
   }
@@ -73,7 +93,7 @@
 <section id="menu" class="section">
   <div class="container">
     <h2 class="section-title">Menu Kami</h2>
-    <div id="katalogProduk" class="grid-3">Loading produk dari database...</div>
+    <div id="katalogProduk" class="produk-slider">Loading produk dari database...</div>
   </div>
 </section>
 
@@ -136,7 +156,7 @@
 <div class="section" id="tentang">
   <h2>Tentang Kami</h2>
   <div class="profil">
-    <img id="tentangImg" src="Asset/Img/Tentang.jpg">  <!-- UDAH DIGANTI ID NYA -->
+    <img id="tentangImg" src="Asset/Img/Tentang.jpg">
     <div><h3>DEWAACAKE</h3><p>Semua berawal dari tahun 2019, dari sebuah dapur rumah yang sederhana dan aroma kue yang selalu memenuhi ruangan. Sampai jadi alasan tersenyum banyak orang hari ini.</p></div>
   </div>
 </div>
@@ -229,8 +249,8 @@ window.addEventListener('load', () => {
   loadBanner('testi_1', 'testi1')
   loadBanner('testi_2', 'testi2')
   loadBanner('testi_3', 'testi3')
-  loadBanner('tentang_kami', 'tentangImg') // <-- INI UDAH BENER
+  loadBanner('tentang_kami', 'tentangImg')
 })
 </script>
 </body>
-</html>
+  </html>
