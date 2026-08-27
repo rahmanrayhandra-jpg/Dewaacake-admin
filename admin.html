@@ -26,8 +26,17 @@
 
 <h1>Dashboard Admin DEWAACAKE</h1>
 
+<!-- BOX BARU: BACKGROUND LANDING -->
 <div class="box">
-  <h2>1. Banner Utama</h2>
+  <h2>1. Background Halaman Awal "Let's the cake"</h2>
+  <img id="landingPreview" class="banner-preview">
+  <input id="uploadLanding" type="file" accept="image/*">
+  <button onclick="uploadDanSimpan('banner_home', 'uploadLanding', 'landingPreview')">Upload & Simpan</button>
+  <p id="msgLanding" class="msg"></p>
+</div>
+
+<div class="box">
+  <h2>2. Banner Utama</h2>
   <img id="bannerPreview" class="banner-preview">
   <input id="uploadBanner" type="file" accept="image/*">
   <button onclick="uploadDanSimpan('banner_menu', 'uploadBanner', 'bannerPreview')">Upload & Simpan Banner</button>
@@ -35,7 +44,7 @@
 </div>
 
 <div class="box">
-  <h2>2. Foto Testimoni</h2>
+  <h2>3. Foto Testimoni</h2>
   <div style="display:flex;gap:10px;flex-wrap:wrap">
     <div><p>Testi 1</p><img id="testi1Preview" class="banner-preview" style="max-width:100px"><input type="file" id="uploadTesti1" accept="image/*"><button onclick="uploadDanSimpan('testi_1', 'uploadTesti1', 'testi1Preview')">Simpan</button></div>
     <div><p>Testi 2</p><img id="testi2Preview" class="banner-preview" style="max-width:100px"><input type="file" id="uploadTesti2" accept="image/*"><button onclick="uploadDanSimpan('testi_2', 'uploadTesti2', 'testi2Preview')">Simpan</button></div>
@@ -44,14 +53,14 @@
 </div>
 
 <div class="box">
-  <h2>3. Foto Tentang Kami</h2>
+  <h2>4. Foto Tentang Kami</h2>
   <img id="tentangPreview" class="banner-preview" style="max-width:200px">
   <input id="uploadTentang" type="file" accept="image/*">
   <button onclick="uploadDanSimpan('tentang_kami', 'uploadTentang', 'tentangPreview')">Upload & Simpan</button>
 </div>
 
 <div class="box">
-  <h2 id="formTitle">4. Tambah Produk Baru</h2>
+  <h2 id="formTitle">5. Tambah Produk Baru</h2>
   <input id="idProduk" type="hidden">
   <input id="namaProduk" placeholder="Nama Produk">
   <input id="hargaProduk" placeholder="Harga" type="number">
@@ -79,6 +88,7 @@ let produkEdit = {}
 loadSemua()
 
 async function loadSemua(){
+  await loadBanner('banner_home', 'landingPreview') // BARU
   await loadBanner('banner_menu', 'bannerPreview')
   await loadBanner('testi_1', 'testi1Preview')
   await loadBanner('testi_2', 'testi2Preview')
@@ -104,8 +114,10 @@ async function uploadDanSimpan(key, inputId, previewId){
   if(error){ alert('Gagal simpan: '+error.message) }
   else{
     document.getElementById(previewId).src = publicUrl
-    document.getElementById('msgBanner').innerText = 'Berhasil disimpan!'
-    setTimeout(()=>document.getElementById('msgBanner').innerText='',2000)
+    // ganti pesan biar ga ketimpa
+    const msgId = previewId.includes('landing')? 'msgLanding' : 'msgBanner'
+    document.getElementById(msgId).innerText = 'Berhasil disimpan!'
+    setTimeout(()=>document.getElementById(msgId).innerText='',2000)
   }
 }
 
