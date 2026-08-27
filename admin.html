@@ -8,73 +8,98 @@
   @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@400;600&display=swap');
   body{font-family:'Poppins',sans-serif;background:#FFFFF0;padding:20px;margin:0}
   h1,h2{font-family:'Playfair Display',serif;color:#3E2F2F}
-.box{background:#fff;border:2px solid #D4AF37;border-radius:12px;padding:20px;margin-bottom:20px}
+
+  /* LOGIN BOX BARU */
+  #loginSection{display:flex;justify-content:center;align-items:center;height:90vh}
+ .login-box{background:#fff;border:2px solid #D4AF37;border-radius:12px;padding:30px;width:320px;text-align:center}
+ .login-box input{width:100%;padding:10px;margin:8px 0;border:1px solid #ccc;border-radius:8px;box-sizing:border-box}
+ .login-box button{width:100%;padding:12px;background:#D4AF37;color:#fff;border:none;border-radius:8px;cursor:pointer;font-weight:600}
+ .error{color:#e74c3c;font-size:12px;margin-top:5px}
+
+  /* DASHBOARD */
+  #dashboardSection{display:none}
+ .box{background:#fff;border:2px solid #D4AF37;border-radius:12px;padding:20px;margin-bottom:20px}
   input,textarea{width:100%;padding:10px;margin:8px 0;border:1px solid #ccc;border-radius:8px;box-sizing:border-box}
   button{padding:10px 20px;background:#D4AF37;color:#fff;border:none;border-radius:8px;cursor:pointer;font-weight:600;margin:5px}
-.btn-hapus{background:#e74c3c}.btn-edit{background:#3498db}
-.produk-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:15px}
-.produk-card{border:1px solid #eee;padding:10px;border-radius:8px;text-align:center;background:#fff}
-.produk-card img{width:100%;height:140px;object-fit:cover;border-radius:8px}
-.btn-group{display:flex;gap:5px;margin-top:10px}
-.btn-group button{flex:1;padding:8px;font-size:12px}
-.banner-preview{width:100%;max-height:150px;object-fit:cover;border-radius:8px;margin-top:10px}
-.msg{font-size:12px;margin-top:5px;color:#27ae60}
-.msg.error{color:#e74c3c}
+ .btn-hapus{background:#e74c3c}.btn-edit{background:#3498db}
+ .produk-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:15px}
+ .produk-card{border:1px solid #eee;padding:10px;border-radius:8px;text-align:center;background:#fff}
+ .produk-card img{width:100%;height:140px;object-fit:cover;border-radius:8px}
+ .btn-group{display:flex;gap:5px;margin-top:10px}
+ .btn-group button{flex:1;padding:8px;font-size:12px}
+ .banner-preview{width:100%;max-height:150px;object-fit:cover;border-radius:8px;margin-top:10px}
+ .msg{font-size:12px;margin-top:5px;color:#27ae60}
+ .msg.error{color:#e74c3c}
+ .logout-btn{background:#95a5a6;float:right}
 </style>
 </head>
 <body>
 
-<h1>Dashboard Admin DEWAACAKE</h1>
-
-<!-- BOX BARU: BACKGROUND LANDING -->
-<div class="box">
-  <h2>1. Background Halaman Awal "Let's the cake"</h2>
-  <img id="landingPreview" class="banner-preview">
-  <input id="uploadLanding" type="file" accept="image/*">
-  <button onclick="uploadDanSimpan('banner_home', 'uploadLanding', 'landingPreview')">Upload & Simpan</button>
-  <p id="msgLanding" class="msg"></p>
-</div>
-
-<div class="box">
-  <h2>2. Banner Utama</h2>
-  <img id="bannerPreview" class="banner-preview">
-  <input id="uploadBanner" type="file" accept="image/*">
-  <button onclick="uploadDanSimpan('banner_menu', 'uploadBanner', 'bannerPreview')">Upload & Simpan Banner</button>
-  <p id="msgBanner" class="msg"></p>
-</div>
-
-<div class="box">
-  <h2>3. Foto Testimoni</h2>
-  <div style="display:flex;gap:10px;flex-wrap:wrap">
-    <div><p>Testi 1</p><img id="testi1Preview" class="banner-preview" style="max-width:100px"><input type="file" id="uploadTesti1" accept="image/*"><button onclick="uploadDanSimpan('testi_1', 'uploadTesti1', 'testi1Preview')">Simpan</button></div>
-    <div><p>Testi 2</p><img id="testi2Preview" class="banner-preview" style="max-width:100px"><input type="file" id="uploadTesti2" accept="image/*"><button onclick="uploadDanSimpan('testi_2', 'uploadTesti2', 'testi2Preview')">Simpan</button></div>
-    <div><p>Testi 3</p><img id="testi3Preview" class="banner-preview" style="max-width:100px"><input type="file" id="uploadTesti3" accept="image/*"><button onclick="uploadDanSimpan('testi_3', 'uploadTesti3', 'testi3Preview')">Simpan</button></div>
+<!-- 1. SECTION LOGIN -->
+<div id="loginSection">
+  <div class="login-box">
+    <h2>Login Admin DEWAACAKE</h2>
+    <input type="text" id="username" placeholder="Username">
+    <input type="password" id="password" placeholder="Password">
+    <button onclick="login()">Login</button>
+    <p id="errorLogin" class="error"></p>
   </div>
 </div>
 
-<div class="box">
-  <h2>4. Foto Tentang Kami</h2>
-  <img id="tentangPreview" class="banner-preview" style="max-width:200px">
-  <input id="uploadTentang" type="file" accept="image/*">
-  <button onclick="uploadDanSimpan('tentang_kami', 'uploadTentang', 'tentangPreview')">Upload & Simpan</button>
-</div>
+<!-- 2. SECTION DASHBOARD KAMU -->
+<div id="dashboardSection">
+  <button class="logout-btn" onclick="logout()">Logout</button>
+  <h1>Dashboard Admin DEWAACAKE</h1>
 
-<div class="box">
-  <h2 id="formTitle">5. Tambah Produk Baru</h2>
-  <input id="idProduk" type="hidden">
-  <input id="namaProduk" placeholder="Nama Produk">
-  <input id="hargaProduk" placeholder="Harga" type="number">
-  <input id="uploadGambar" type="file" accept="image/*">
-  <img id="previewGambar" style="display:none;width:100px;height:100px;object-fit:cover;border-radius:8px;margin-top:10px">
-  <input id="gambarProduk" type="hidden">
-  <button onclick="simpanProduk()" id="btnSimpan">+ Simpan Produk</button>
-  <button onclick="batalEdit()" id="btnBatal" style="display:none;background:#95a5a6">Batal</button>
-  <p id="msgProduk" class="msg"></p>
-</div>
+  <div class="box">
+    <h2>1. Background Halaman Awal "Let's the cake"</h2>
+    <img id="landingPreview" class="banner-preview">
+    <input id="uploadLanding" type="file" accept="image/*">
+    <button onclick="uploadDanSimpan('banner_home', 'uploadLanding', 'landingPreview')">Upload & Simpan</button>
+    <p id="msgLanding" class="msg"></p>
+  </div>
 
-<div class="box">
-  <h2>Daftar Produk</h2>
-  <div id="listProduk" class="produk-list">Loading...</div>
+  <div class="box">
+    <h2>2. Banner Utama</h2>
+    <img id="bannerPreview" class="banner-preview">
+    <input id="uploadBanner" type="file" accept="image/*">
+    <button onclick="uploadDanSimpan('banner_menu', 'uploadBanner', 'bannerPreview')">Upload & Simpan Banner</button>
+    <p id="msgBanner" class="msg"></p>
+  </div>
+
+  <div class="box">
+    <h2>3. Foto Testimoni</h2>
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+      <div><p>Testi 1</p><img id="testi1Preview" class="banner-preview" style="max-width:100px"><input type="file" id="uploadTesti1" accept="image/*"><button onclick="uploadDanSimpan('testi_1', 'uploadTesti1', 'testi1Preview')">Simpan</button></div>
+      <div><p>Testi 2</p><img id="testi2Preview" class="banner-preview" style="max-width:100px"><input type="file" id="uploadTesti2" accept="image/*"><button onclick="uploadDanSimpan('testi_2', 'uploadTesti2', 'testi2Preview')">Simpan</button></div>
+      <div><p>Testi 3</p><img id="testi3Preview" class="banner-preview" style="max-width:100px"><input type="file" id="uploadTesti3" accept="image/*"><button onclick="uploadDanSimpan('testi_3', 'uploadTesti3', 'testi3Preview')">Simpan</button></div>
+    </div>
+  </div>
+
+  <div class="box">
+    <h2>4. Foto Tentang Kami</h2>
+    <img id="tentangPreview" class="banner-preview" style="max-width:200px">
+    <input id="uploadTentang" type="file" accept="image/*">
+    <button onclick="uploadDanSimpan('tentang_kami', 'uploadTentang', 'tentangPreview')">Upload & Simpan</button>
+  </div>
+
+  <div class="box">
+    <h2 id="formTitle">5. Tambah Produk Baru</h2>
+    <input id="idProduk" type="hidden">
+    <input id="namaProduk" placeholder="Nama Produk">
+    <input id="hargaProduk" placeholder="Harga" type="number">
+    <input id="uploadGambar" type="file" accept="image/*">
+    <img id="previewGambar" style="display:none;width:100px;height:100px;object-fit:cover;border-radius:8px;margin-top:10px">
+    <input id="gambarProduk" type="hidden">
+    <button onclick="simpanProduk()" id="btnSimpan">+ Simpan Produk</button>
+    <button onclick="batalEdit()" id="btnBatal" style="display:none;background:#95a5a6">Batal</button>
+    <p id="msgProduk" class="msg"></p>
+  </div>
+
+  <div class="box">
+    <h2>Daftar Produk</h2>
+    <div id="listProduk" class="produk-list">Loading...</div>
+  </div>
 </div>
 
 <script>
@@ -85,10 +110,42 @@ const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY)
 let modeEdit = false
 let produkEdit = {}
 
+// CEK LOGIN DULU
+db.auth.getSession().then(({ data: { session }}) => {
+  if(session){ showDashboard() }
+})
+
+// FUNGSI LOGIN BARU
+async function login() {
+  const username = document.getElementById('username').value
+  const password = document.getElementById('password').value
+  const email = username + '@dewaacake.local' // OTOMATIS JADI EMAIL
+
+  const { error } = await db.auth.signInWithPassword({ email, password })
+
+  if (error) {
+    document.getElementById('errorLogin').innerText = 'Username/Password salah'
+  } else {
+    showDashboard()
+  }
+}
+
+function showDashboard(){
+  document.getElementById('loginSection').style.display = 'none'
+  document.getElementById('dashboardSection').style.display = 'block'
+  loadSemua() // baru load data kalau udah login
+}
+
+async function logout() {
+  await db.auth.signOut()
+  location.reload()
+}
+
+// SEMUA FUNGSI KAMU TETEP SAMA DARI SINI
 loadSemua()
 
 async function loadSemua(){
-  await loadBanner('banner_home', 'landingPreview') // BARU
+  await loadBanner('banner_home', 'landingPreview')
   await loadBanner('banner_menu', 'bannerPreview')
   await loadBanner('testi_1', 'testi1Preview')
   await loadBanner('testi_2', 'testi2Preview')
@@ -114,7 +171,6 @@ async function uploadDanSimpan(key, inputId, previewId){
   if(error){ alert('Gagal simpan: '+error.message) }
   else{
     document.getElementById(previewId).src = publicUrl
-    // ganti pesan biar ga ketimpa
     const msgId = previewId.includes('landing')? 'msgLanding' : 'msgBanner'
     document.getElementById(msgId).innerText = 'Berhasil disimpan!'
     setTimeout(()=>document.getElementById(msgId).innerText='',2000)
