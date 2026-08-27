@@ -1,0 +1,21 @@
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const supabaseUrl = 'https://wcydigragsujlumtlxsb.supabase.co'
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndjeWRpZ3JhZ3N1amx1bXRseHNiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc3MzkzNjIsImV4cCI6MjEwMzMxNTM2Mn0.073ZiBOXltLikQqN7pyNBFinfkBwZTWIc5Gj7DV8Hp0'
+const supabase = createClient(supabaseUrl, supabaseKey)
+
+// TAMPILIN DATA
+async function loadPromo() {
+  const { data } = await supabase.from('promo').select('*').order('id', {ascending: false})
+  // loop data masukin ke table
+}
+
+// TAMBAH DATA
+async function tambahPromo() {
+  await supabase.from('promo').insert([{ 
+    kode_promo: 'DEWA10', 
+    nama_promo: 'Diskon 10%',
+    diskon_percent: 10 
+  }])
+}
+</script>
