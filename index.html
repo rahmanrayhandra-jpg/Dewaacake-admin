@@ -1,57 +1,24 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DEWAACAKE</title>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <style>
-    * { margin: 0; }
-    .hero { 
-      height: 100vh; 
-      background-color: #FDF6E3; /* 1. JANGAN PAKAI SHORTHAND background */
-      background-position: center;
-      background-size: cover; 
-      background-repeat: no-repeat;
-      display:flex; 
-      align-items:flex-end; 
-      justify-content:center; 
-      padding-bottom:60px; 
-    }
-    .btn-menu { 
-      padding: 12px 28px; 
-      background: rgba(92, 74, 60, 0.85); 
-      color: #FDF6E3; 
-      text-decoration: none; 
-      border-radius: 25px; 
-      font-weight: 600; 
-      backdrop-filter: blur(5px);
-      border: 1px solid rgba(253,246,227,0.3)
-    }
-  </style>
-</head>
+<style>
+  .hero { 
+    height: 100vh; 
+    background-color: #FDF6E3;
+    background-image: url('Brand.jpg'); /* TAMBAHIN INI */
+    background-position: center;
+    background-size: cover; 
+    background-repeat: no-repeat;
+    display:flex; 
+    align-items:flex-end; 
+    justify-content:center; 
+    padding-bottom:60px; 
+  }
+</style>
 <body>
   <section class="hero" id="banner_home">
     <a href="menu.html" class="btn-menu">Let's the cake</a>
   </section>
 
 <script>
-  const SUPABASE_URL = 'https://wcydigragsujlumtlxsb.supabase.co'
-  const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndjeWRpZ3JhZ3N1amx1bXRseHNiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc3MzkzNjIsImV4cCI6MjEwMzMxNTM2Mn0.073ZiBOXltLikQqN7pyNBFinfkBwZTWIc5Gj7DV8Hp0'
-  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY)
-
-  async function loadBanner() {
-    const { data, error } = await supabase.from('setting').select('value').eq('key', 'banner_home').single()
-    
-    if(error) console.log("Error ambil banner:", error)
-    if(data && data.value){ 
-      const hero = document.getElementById('banner_home')
-      hero.style.backgroundImage = `url("${data.value}")` // 2. PAKAI " bukan '
-      console.log("Banner terpasang:", data.value)
-    }
-  }
-  
-  loadBanner() // langsung jalan, ga usah nunggu 'load'
+  // HAPUS SEMUA SCRIPT SUPABASE BUAT BANNER DULU
+  // Biarin kosong. Nanti kita pake lagi
 </script>
 </body>
-</html>
