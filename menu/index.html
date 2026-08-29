@@ -12,33 +12,34 @@
   body{background:var(--ivory);color:var(--dark)}
   nav{display:flex;justify-content:space-between;align-items:center;padding:20px 8%;background:rgba(255,255,240,0.8);backdrop-filter:blur(10px);position:sticky;top:0;z-index:99;flex-wrap:wrap}
   nav a{color:var(--dark);text-decoration:none;font-weight:500;margin-left:25px}
- .hero{background:center/cover no-repeat;height:70vh;display:flex;align-items:center;padding:0 8%;position:relative}
- .hero::after{content:'';position:absolute;top:0;left:0;right:0;bottom:0;background:rgba(62,47,47,0.4)}
- .hero-text{position:relative;z-index:2;color:#fff;max-width:500px}
- .hero-text h1{font-family:'Playfair Display',serif;font-size:36px;line-height:1.2;margin-bottom:15px}
- .hero-text p{font-size:17px;margin-bottom:30px;opacity:0.9}
- .btn{background:var(--gold);color:#fff;padding:15px 35px;border-radius:50px;text-decoration:none;font-weight:600;transition:0.3s;display:inline-block;cursor:pointer;border:none}
- .btn:hover{background:#c19b2e;transform:translateY(-2px)}
- .section{padding:60px 6%;max-width:1300px;margin:auto}
- .section h2{font-family:'Playfair Display',serif;font-size:36px;text-align:center;margin-bottom:50px;color:var(--dark)}
- .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px}
- .card{background:#fff;border:1px solid #eee;border-radius:16px;overflow:hidden;transition:0.3s}
- .card:hover{box-shadow:0 10px 25px rgba(166,123,91,0.15);transform:translateY(-5px)}
- .card img{width:100%;height:240px;object-fit:cover}
- .card-info{padding:20px}
- .card-info h3{font-size:18px;margin-bottom:8px}
- .card-info.harga{color:var(--coklat);font-weight:700;font-size:18px;margin-bottom:15px}
- .btn-keranjang{background:var(--gold);color:#fff;padding:10px 20px;border-radius:8px;border:none;font-size:14px;font-weight:500;cursor:pointer;width:100%;margin-top:8px}
- .profil{background:#fff;padding:50px;border-radius:20px;display:flex;gap:40px;align-items:center;flex-wrap:wrap;justify-content:center}
- .profil img{width:100%;max-width:250px;border-radius:16px}
- .profil div{flex:1;min-width:280px}
- .footer{background:var(--dark);color:#ddd;text-align:left;padding:20px 8%}
- .logo {display: flex;align-items: center;gap: 12px;text-decoration: none;}
- .logo-icon {width: 40px;height: 40px;}
- .logo span {font-family: 'Playfair Display', serif;font-size: 22px;font-weight: 600;letter-spacing: 3px;color: #3E2F2F;}
+  .hero{background:center/cover no-repeat;height:70vh;display:flex;align-items:center;padding:0 8%;position:relative}
+  .hero::after{content:'';position:absolute;top:0;left:0;right:0;bottom:0;background:rgba(62,47,47,0.4)}
+  .hero-text{position:relative;z-index:2;color:#fff;max-width:500px}
+  .hero-text h1{font-family:'Playfair Display',serif;font-size:36px;line-height:1.2;margin-bottom:15px}
+  .hero-text p{font-size:17px;margin-bottom:30px;opacity:0.9}
+  .btn{background:var(--gold);color:#fff;padding:15px 35px;border-radius:50px;text-decoration:none;font-weight:600;transition:0.3s;display:inline-block;cursor:pointer;border:none}
+  .btn:hover{background:#c19b2e;transform:translateY(-2px)}
+  .section{padding:60px 6%;max-width:1300px;margin:auto}
+  .section h2{font-family:'Playfair Display',serif;font-size:36px;text-align:center;margin-bottom:50px;color:var(--dark)}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px}
+  .grid-3{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px}
+  .card{background:#fff;border:1px solid #eee;border-radius:16px;overflow:hidden;transition:0.3s}
+  .card:hover{box-shadow:0 10px 25px rgba(166,123,91,0.15);transform:translateY(-5px)}
+  .card img{width:100%;height:240px;object-fit:cover}
+  .card-info{padding:20px}
+  .card-info h3{font-size:18px;margin-bottom:8px}
+  .card-info .harga{color:var(--coklat);font-weight:700;font-size:18px;margin-bottom:15px}
+  .btn-keranjang{background:var(--gold);color:#fff;padding:10px 20px;border-radius:8px;border:none;font-size:14px;font-weight:500;cursor:pointer;width:100%;margin-top:8px}
+  .profil{background:#fff;padding:50px;border-radius:20px;display:flex;gap:40px;align-items:center;flex-wrap:wrap;justify-content:center}
+  .profil img{width:100%;max-width:250px;border-radius:16px}
+  .profil div{flex:1;min-width:280px}
+  .footer{background:var(--dark);color:#ddd;text-align:left;padding:20px 8%}
+  .logo {display: flex;align-items: center;gap: 12px;text-decoration: none;}
+  .logo-icon {width: 40px;height: 40px;}
+  .logo span {font-family: 'Playfair Display', serif;font-size: 22px;font-weight: 600;letter-spacing: 3px;color: #3E2F2F;}
 
-  /* SLIDER PRODUK BARU - UDAH DIFIX */
- .produk-slider {
+  /* SLIDER PRODUK BARU */
+  .produk-slider {
     display: flex;
     gap: 16px;
     overflow-x: auto;
@@ -46,23 +47,15 @@
     padding: 10px 4px 20px 4px;
     -webkit-overflow-scrolling: touch;
   }
- .produk-slider::-webkit-scrollbar { display: none; }
- .produk-slider.card { /* INI TADI SALAH */
+  .produk-slider::-webkit-scrollbar { display: none; }
+  .produk-slider .card {
     min-width: 260px;
     flex-shrink: 0;
     scroll-snap-align: start;
   }
   @media (min-width: 768px){
-   .produk-slider.card { /* INI JUGA */
-      min-width: 300px;
-    }
+    .produk-slider .card { min-width: 300px; }
   }
-
-  /* STYLE KOMENTAR BARU */
- .komentar-card{background:#fff; padding:15px; border-radius:12px; border:1px solid #eee}
- .komentar-card h4{font-size:15px; margin-bottom:5px; color:var(--coklat)}
- .komentar-card p{font-size:14px}
- .tanggal{font-size:12px; color:#999; margin-top:5px}
 
   @media (max-width: 768px) {
     nav{padding:15px 6%}.hero-text h1{font-size:30px}.hero{height:60vh}.section{padding:50px 6%} nav a{margin-left:10px;font-size:14px}
@@ -81,8 +74,8 @@
   </a>
   <div>
     <a href="#menu">Katalog</a>
-    <a href="#promo">Promo</a>
-    <a href="#komentar">Komentar</a>
+    <a href="#hampers">Hampers</a>
+    <a href="#testimoni">Testimoni</a>
     <a href="#tentang">Tentang</a>
     <a href="#alamat">Lokasi</a>
     <a href="#kontak">Order</a>
@@ -123,26 +116,40 @@
   </div>
 </div>
 
-<!-- BAGIAN PROMO BARU -->
-<div class="section" id="promo" style="background:#fff;border-radius:20px">
-  <h2>Promo Bundling Hemat 🔥</h2>
-  <div id="katalogPromo" class="grid">
-    Loading promo...
+<div class="section" id="hampers" style="background:#fff;border-radius:20px">
+  <h2>Paket Hampers Kantor</h2>
+  <div class="grid">
+    <div class="card" style="border:2px solid var(--gold)">
+      <div style="background:var(--gold);color:#fff;text-align:center;padding:8px;font-weight:600;">PALING LARIS</div>
+      <div class="card-info">
+        <h3>Paket SuperGold</h3><p>Isi: 2 Toples Nastar premium + Strudle </p>
+        <p class="harga">Rp 220.000</p>
+        <button class="btn-keranjang" onclick="tambahKeKeranjang('Paket SuperGold', 220000)">+ Keranjang</button>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-info">
+        <h3>Paket Gold Premium</h3><p>Isi: 3 Toples Nastar Premium</p>
+        <p class="harga">Rp 240.000</p>
+        <button class="btn-keranjang" onclick="tambahKeKeranjang('Paket Gold Premium', 240000)">+ Keranjang</button>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-info">
+        <h3>Paket Corporate 10pcs</h3><p>Isi: 10 Box Strudle</p>
+        <p class="harga">Rp 600.000</p>
+        <button class="btn-keranjang" onclick="tambahKeKeranjang('Paket Corporate 10pcs', 600000)">+ Keranjang</button>
+      </div>
+    </div>
   </div>
 </div>
 
-<!-- BAGIAN KOMENTAR BARU -->
-<div class="section" id="komentar">
-  <h2>Komentar Pelanggan 💬</h2>
-  <div style="max-width:700px;margin:auto">
-    <form onsubmit="kirimKomentar(event)" style="margin-bottom:30px">
-      <input id="namaKomentar" placeholder="Nama kamu" required style="width:100%; padding:12px; margin-bottom:10px; border:1px solid #ccc; border-radius:8px;">
-      <textarea id="isiKomentar" placeholder="Tulis komentar kamu..." rows="3" required style="width:100%; padding:12px; margin-bottom:10px; border:1px solid #ccc; border-radius:8px;"></textarea>
-      <button type="submit" class="btn" style="width:100%">Kirim Komentar</button>
-    </form>
-    <div id="listKomentar" style="display:flex; flex-direction:column; gap:15px">
-      Loading komentar...
-    </div>
+<div class="section" id="testimoni">
+  <h2>Kata Mereka Tentang Kami</h2>
+  <div class="grid">
+    <div class="card" style="padding:25px;text-align:center;"><p>"Kuenya lumer banget!"</p><img id="testi1" src="Asset/Img/Cust1.jpg" style="width:45px;height:45px;border-radius:50%;object-fit:cover"><h4>Mas Giri</h4></div>
+    <div class="card" style="padding:25px;text-align:center;"><p>"Nastar nya bener2 premium."</p><img id="testi2" src="orang2.jpg" style="width:45px;height:45px;border-radius:50%;object-fit:cover"><h4>Pak Riko</h4></div>
+    <div class="card" style="padding:25px;text-align:center;"><p>"Respons cepet banget."</p><img id="testi3" src="orang3.jpg" style="width:45px;height:45px;border-radius:50%;object-fit:cover"><h4>Kak Sinta</h4></div>
   </div>
 </div>
 
@@ -169,7 +176,7 @@
 
 <div class="section" id="kontak">
   <h2>Order Sekarang</h2>
-  <div style="text-align:center"><p>Chat admin untuk katalog lengkap & pemesanan</p><br><a href="https://wa.me/6287784001408" class="btn">Chat WhatsApp</a></div>
+  <div style="text-align:center"><p>Chat admin untuk katalog lengkap & pemesanan hampers kantor</p><br><a href="https://wa.me/6287784001408" class="btn">Chat WhatsApp</a></div>
 </div>
 
 <div class="footer"><h2>DEWAACAKE</h2><p>Copyright©2026<br>DevancaProject</p></div>
@@ -189,55 +196,6 @@ async function loadKatalog(){
     html += `<div class="card"><img src="${p.gambar || 'https://via.placeholder.com/300x240'}"><div class="card-info"><h3>${p.nama}</h3><p class="harga">Rp${p.harga? p.harga.toLocaleString('id-ID') : 0}</p><button class="btn-keranjang" onclick="tambahKeKeranjang('${p.nama}', ${p.harga})">+ Keranjang</button></div></div>`
   })
   document.getElementById('katalogProduk').innerHTML = html || 'Belum ada produk'
-}
-
-// LOAD PROMO DARI SUPABASE
-async function loadPromo(){
-  const { data, error } = await db.from('promo').select('*').order('id', {ascending:false})
-  if(error){ document.getElementById('katalogPromo').innerHTML = 'Gagal load: '+error.message; return }
-  let html = ''
-  data.forEach(p => {
-    html += `<div class="card" style="border:2px solid var(--gold)">
-      <div style="background:var(--gold);color:#fff;text-align:center;padding:8px;font-weight:600;">${p.label || 'PROMO'}</div>
-      <div class="card-info">
-        <h3>${p.nama}</h3><p>${p.deskripsi}</p>
-        <p class="harga">Rp${p.harga? p.harga.toLocaleString('id-ID') : 0}</p>
-        <button class="btn-keranjang" onclick="tambahKeKeranjang('${p.nama}', ${p.harga})">+ Keranjang</button>
-      </div>
-    </div>`
-  })
-  document.getElementById('katalogPromo').innerHTML = html || 'Belum ada promo'
-}
-
-// LOAD KOMENTAR DARI SUPABASE
-async function loadKomentar(){
-  const { data, error } = await db.from('komentar').select('*').order('created_at', {ascending:false}).limit(10)
-  if(error){ document.getElementById('listKomentar').innerHTML = 'Gagal load: '+error.message; return }
-  let html = ''
-  data.forEach(k => {
-    const tgl = new Date(k.created_at).toLocaleDateString('id-ID')
-    html += `<div class="komentar-card">
-      <h4>${k.nama}</h4>
-      <p>${k.isi}</p>
-      <p class="tanggal">${tgl}</p>
-    </div>`
-  })
-  document.getElementById('listKomentar').innerHTML = html || 'Belum ada komentar'
-}
-
-// KIRIM KOMENTAR KE SUPABASE
-async function kirimKomentar(e){
-  e.preventDefault()
-  const nama = document.getElementById('namaKomentar').value
-  const isi = document.getElementById('isiKomentar').value
-  const { error } = await db.from('komentar').insert([{nama, isi}])
-  if(error){ alert('Gagal kirim: '+error.message) }
-  else {
-    alert('Makasih komentarnya!')
-    document.getElementById('namaKomentar').value = ''
-    document.getElementById('isiKomentar').value = ''
-    loadKomentar()
-  }
 }
 
 function tambahKeKeranjang(nama, harga){
@@ -284,9 +242,10 @@ async function loadBanner(key, elementId, isBackground = false) {
 
 window.addEventListener('load', () => {
   loadKatalog()
-  loadPromo()
-  loadKomentar()
   loadBanner('banner_menu', 'banner_menu', true)
+  loadBanner('testi_1', 'testi1')
+  loadBanner('testi_2', 'testi2')
+  loadBanner('testi_3', 'testi3')
   loadBanner('tentang_kami', 'tentangImg')
 })
 </script>
