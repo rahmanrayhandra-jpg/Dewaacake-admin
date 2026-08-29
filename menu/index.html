@@ -60,10 +60,6 @@
   @media (max-width: 768px) {
     nav{padding:15px 6%}.hero-text h1{font-size:30px}.hero{height:60vh}.section{padding:50px 6%} nav a{margin-left:10px;font-size:14px}
   }
-.komentar-card{background:#fff; padding:15px; border-radius:12px; border:1px solid #eee}
-.komentar-card h4{font-size:15px; margin-bottom:5px; color:var(--coklat)}
-.komentar-card p{font-size:14px}
-.tanggal{font-size:12px; color:#999; margin-top:5px}
 </style>
 </head>
 <body>
@@ -78,8 +74,8 @@
   </a>
   <div>
     <a href="#menu">Katalog</a>
-    <a href="#hampers">Promo</a>
-    <a href="#testimoni">Ulasan</a>
+    <a href="#hampers">Hampers</a>
+    <a href="#testimoni">Testimoni</a>
     <a href="#tentang">Tentang</a>
     <a href="#alamat">Lokasi</a>
     <a href="#kontak">Order</a>
@@ -98,19 +94,6 @@
   <div class="container">
     <h2 class="section-title">Menu Kami</h2>
     <div id="katalogProduk" class="produk-slider">Loading...</div>
-// 1. LOAD PROMO DARI SUPABASE table 'promo'
-async function loadPromo(){
-  const { data, error } = await db.from('promo').select('*').order('id', {ascending:false})
-  if(error){ document.getElementById('katalogPromo').innerHTML = 'Gagal load: '+error.message; return }
-  let html = ''
-  data.forEach(p => {
-    html += `<div class="card" style="border:2px solid var(--gold)">
-      <div style="background:var(--gold);color:#fff;text-align:center;padding:8px;font-weight:600;">${p.label || 'PROMO'}</div>
-      <div class="card-info">
-        <h3>${p.nama}</h3><p>${p.deskripsi}</p>
-        <p class="harga">Rp${p.harga? p.harga.toLocaleString('id-ID') : 0}</p>
-        <button class="btn-keranjang" onclick="tambahKeKeranjang('${p.nama}', ${p.harga})">+ Keranjang</button>
-      </div>
   </div>
 </section>
 
@@ -133,28 +116,43 @@ async function loadPromo(){
   </div>
 </div>
 
-<!-- GANTI BAGIAN HAMPERS LAMA DENGAN INI -->
-<div class="section" id="promo">
-  <h2>Promo Bundling Hemat 🔥</h2>
-  <div id="katalogPromo" class="grid">
-    Coming soon...
-  </div>
-</div>
-
-<!-- GANTI BAGIAN TESTIMONI LAMA DENGAN INI -->
-<div class="section" id="komentar">
-  <h2>Komentar Pelanggan 💬</h2>
-  <div style="max-width:700px;margin:auto">
-    <form onsubmit="kirimKomentar(event)" style="margin-bottom:30px">
-      <input id="namaKomentar" placeholder="Nama kamu" required style="width:100%; padding:12px; margin-bottom:10px; border:1px solid #ccc; border-radius:8px;">
-      <textarea id="isiKomentar" placeholder="Tulis komentar kamu..." rows="3" required style="width:100%; padding:12px; margin-bottom:10px; border:1px solid #ccc; border-radius:8px;"></textarea>
-      <button type="submit" class="btn" style="width:100%">Kirim Komentar</button>
-    </form>
-    <div id="listKomentar" style="display:flex; flex-direction:column; gap:15px">
-    berikan ulasanmu sekarang
+<div class="section" id="hampers" style="background:#fff;border-radius:20px">
+  <h2>Paket Hampers Kantor</h2>
+  <div class="grid">
+    <div class="card" style="border:2px solid var(--gold)">
+      <div style="background:var(--gold);color:#fff;text-align:center;padding:8px;font-weight:600;">PALING LARIS</div>
+      <div class="card-info">
+        <h3>Paket SuperGold</h3><p>Isi: 2 Toples Nastar premium + Strudle </p>
+        <p class="harga">Rp 220.000</p>
+        <button class="btn-keranjang" onclick="tambahKeKeranjang('Paket SuperGold', 220000)">+ Keranjang</button>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-info">
+        <h3>Paket Gold Premium</h3><p>Isi: 3 Toples Nastar Premium</p>
+        <p class="harga">Rp 240.000</p>
+        <button class="btn-keranjang" onclick="tambahKeKeranjang('Paket Gold Premium', 240000)">+ Keranjang</button>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-info">
+        <h3>Paket Corporate 10pcs</h3><p>Isi: 10 Box Strudle</p>
+        <p class="harga">Rp 600.000</p>
+        <button class="btn-keranjang" onclick="tambahKeKeranjang('Paket Corporate 10pcs', 600000)">+ Keranjang</button>
+      </div>
     </div>
   </div>
 </div>
+
+<div class="section" id="testimoni">
+  <h2>Kata Mereka Tentang Kami</h2>
+  <div class="grid">
+    <div class="card" style="padding:25px;text-align:center;"><p>"Kuenya lumer banget!"</p><img id="testi1" src="Asset/Img/Cust1.jpg" style="width:45px;height:45px;border-radius:50%;object-fit:cover"><h4>Mas Giri</h4></div>
+    <div class="card" style="padding:25px;text-align:center;"><p>"Nastar nya bener2 premium."</p><img id="testi2" src="orang2.jpg" style="width:45px;height:45px;border-radius:50%;object-fit:cover"><h4>Pak Riko</h4></div>
+    <div class="card" style="padding:25px;text-align:center;"><p>"Respons cepet banget."</p><img id="testi3" src="orang3.jpg" style="width:45px;height:45px;border-radius:50%;object-fit:cover"><h4>Kak Sinta</h4></div>
+  </div>
+</div>
+
 <div class="section" id="tentang">
   <h2>Tentang Kami</h2>
   <div class="profil">
