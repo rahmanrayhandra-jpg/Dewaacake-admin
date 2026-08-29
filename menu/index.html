@@ -60,6 +60,10 @@
   @media (max-width: 768px) {
     nav{padding:15px 6%}.hero-text h1{font-size:30px}.hero{height:60vh}.section{padding:50px 6%} nav a{margin-left:10px;font-size:14px}
   }
+.komentar-card{background:#fff; padding:15px; border-radius:12px; border:1px solid #eee}
+.komentar-card h4{font-size:15px; margin-bottom:5px; color:var(--coklat)}
+.komentar-card p{font-size:14px}
+.tanggal{font-size:12px; color:#999; margin-top:5px}
 </style>
 </head>
 <body>
@@ -94,6 +98,54 @@
   <div class="container">
     <h2 class="section-title">Menu Kami</h2>
     <div id="katalogProduk" class="produk-slider">Loading...</div>
+// 1. LOAD PROMO DARI SUPABASE table 'promo'
+async function loadPromo(){
+  const { data, error } = await db.from('promo').select('*').order('id', {ascending:false})
+  if(error){ document.getElementById('katalogPromo').innerHTML = 'Gagal load: '+error.message; return }
+  let html = ''
+  data.forEach(p => {
+    html += `<div class="card" style="border:2px solid var(--gold)">
+      <div style="background:var(--gold);color:#fff;text-align:center;padding:8px;font-weight:600;">${p.label || 'PROMO'}</div>
+      <div class="card-info">
+        <h3>${p.nama}</h3><p>${p.deskripsi}</p>
+        <p class="harga">Rp${p.harga? p.harga.toLocaleString('id-ID') : 0}</p>
+        <button class="btn-keranjang" onclick="tambahKeKeranjang('${p.nama}', ${p.harga})">+ Keranjang</button>
+      </div>
+    </div>`
+  })
+  document.getElementById('katalogPromo').innerHTML = html || 'Belum ada promo'
+}
+
+// 2. LOAD KOMENTAR DARI SUPABASE table 'komentar'
+async function loadKomentar(){
+  const { data, error } = await db.from('komentar').select('*').order('created_at', {ascending:false}).limit(10)
+  if(error){ document.getElementById('listKomentar').innerHTML = 'Gagal load: '+error.message; return }
+  let html = ''
+  data.forEach(k => {
+    const tgl = new Date(k.created_at).toLocaleDateString('id-ID')
+    html += `<div class="komentar-card">
+      <h4>${k.nama}</h4>
+      <p>${k.isi}</p>
+      <p class="tanggal">${tgl}</p>
+    </div>`
+  })
+  document.getElementById('listKomentar').innerHTML = html || 'Belum ada komentar'
+}
+
+// 3. KIRIM KOMENTAR KE SUPABASE
+async function kirimKomentar(e){
+  e.preventDefault()
+  const nama = document.getElementById('namaKomentar').value
+  const isi = document.getElementById('isiKomentar').value
+  const { error } = await db.from('komentar').insert([{nama, isi}])
+  if(error){ alert('Gagal kirim: '+error.message) } 
+  else {
+    alert('Makasih komentarnya!')
+    document.getElementById('namaKomentar').value = ''
+    document.getElementById('isiKomentar').value = ''
+    loadKomentar()
+  }
+}
   </div>
 </section>
 
