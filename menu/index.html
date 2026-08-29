@@ -116,48 +116,26 @@
   </div>
 </div>
 
-<div class="section" id="hampers" style="background:#fff;border-radius:20px">
-  <h2>Paket Hampers Kantor</h2>
-  <div class="grid">
-    <div class="card" style="border:2px solid var(--gold)">
-      <div style="background:var(--gold);color:#fff;text-align:center;padding:8px;font-weight:600;">PALING LARIS</div>
-      <div class="card-info">
-        <h3>Paket SuperGold</h3><p>Isi: 2 Toples Nastar premium + Strudle </p>
-        <p class="harga">Rp 220.000</p>
-        <button class="btn-keranjang" onclick="tambahKeKeranjang('Paket SuperGold', 220000)">+ Keranjang</button>
-      </div>
-    </div>
-    <div class="card">
-      <div class="card-info">
-        <h3>Paket Gold Premium</h3><p>Isi: 3 Toples Nastar Premium</p>
-        <p class="harga">Rp 240.000</p>
-        <button class="btn-keranjang" onclick="tambahKeKeranjang('Paket Gold Premium', 240000)">+ Keranjang</button>
-      </div>
-    </div>
-    <div class="card">
-      <div class="card-info">
-        <h3>Paket Corporate 10pcs</h3><p>Isi: 10 Box Strudle</p>
-        <p class="harga">Rp 600.000</p>
-        <button class="btn-keranjang" onclick="tambahKeKeranjang('Paket Corporate 10pcs', 600000)">+ Keranjang</button>
-      </div>
-    </div>
+<!-- GANTI BAGIAN HAMPERS LAMA DENGAN INI -->
+<div class="section" id="promo">
+  <h2>Promo Bundling Hemat 🔥</h2>
+  <div id="katalogPromo" class="grid">
+    Loading promo...
   </div>
 </div>
 
-<div class="section" id="testimoni">
-  <h2>Kata Mereka Tentang Kami</h2>
-  <div class="grid">
-    <div class="card" style="padding:25px;text-align:center;"><p>"Kuenya lumer banget!"</p><img id="testi1" src="Asset/Img/Cust1.jpg" style="width:45px;height:45px;border-radius:50%;object-fit:cover"><h4>Mas Giri</h4></div>
-    <div class="card" style="padding:25px;text-align:center;"><p>"Nastar nya bener2 premium."</p><img id="testi2" src="orang2.jpg" style="width:45px;height:45px;border-radius:50%;object-fit:cover"><h4>Pak Riko</h4></div>
-    <div class="card" style="padding:25px;text-align:center;"><p>"Respons cepet banget."</p><img id="testi3" src="orang3.jpg" style="width:45px;height:45px;border-radius:50%;object-fit:cover"><h4>Kak Sinta</h4></div>
-  </div>
-</div>
-
-<div class="section" id="tentang">
-  <h2>Tentang Kami</h2>
-  <div class="profil">
-    <img id="tentangImg" src="Asset/Img/Tentang.jpg">
-    <div><h3>DEWAACAKE</h3><p>Semua berawal dari tahun 2019, dari sebuah dapur rumah yang sederhana dan aroma kue yang selalu memenuhi ruangan. Sampai jadi alasan tersenyum banyak orang hari ini.</p></div>
+<!-- GANTI BAGIAN TESTIMONI LAMA DENGAN INI -->
+<div class="section" id="komentar">
+  <h2>Komentar Pelanggan 💬</h2>
+  <div style="max-width:700px;margin:auto">
+    <form onsubmit="kirimKomentar(event)" style="margin-bottom:30px">
+      <input id="namaKomentar" placeholder="Nama kamu" required style="width:100%; padding:12px; margin-bottom:10px; border:1px solid #ccc; border-radius:8px;">
+      <textarea id="isiKomentar" placeholder="Tulis komentar kamu..." rows="3" required style="width:100%; padding:12px; margin-bottom:10px; border:1px solid #ccc; border-radius:8px;"></textarea>
+      <button type="submit" class="btn" style="width:100%">Kirim Komentar</button>
+    </form>
+    <div id="listKomentar" style="display:flex; flex-direction:column; gap:15px">
+      Loading komentar...
+    </div>
   </div>
 </div>
 
