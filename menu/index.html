@@ -111,41 +111,6 @@ async function loadPromo(){
         <p class="harga">Rp${p.harga? p.harga.toLocaleString('id-ID') : 0}</p>
         <button class="btn-keranjang" onclick="tambahKeKeranjang('${p.nama}', ${p.harga})">+ Keranjang</button>
       </div>
-    </div>`
-  })
-  document.getElementById('katalogPromo').innerHTML = html || 'Belum ada promo'
-}
-
-// 2. LOAD KOMENTAR DARI SUPABASE table 'komentar'
-async function loadKomentar(){
-  const { data, error } = await db.from('komentar').select('*').order('created_at', {ascending:false}).limit(10)
-  if(error){ document.getElementById('listKomentar').innerHTML = 'Gagal load: '+error.message; return }
-  let html = ''
-  data.forEach(k => {
-    const tgl = new Date(k.created_at).toLocaleDateString('id-ID')
-    html += `<div class="komentar-card">
-      <h4>${k.nama}</h4>
-      <p>${k.isi}</p>
-      <p class="tanggal">${tgl}</p>
-    </div>`
-  })
-  document.getElementById('listKomentar').innerHTML = html || 'Belum ada komentar'
-}
-
-// 3. KIRIM KOMENTAR KE SUPABASE
-async function kirimKomentar(e){
-  e.preventDefault()
-  const nama = document.getElementById('namaKomentar').value
-  const isi = document.getElementById('isiKomentar').value
-  const { error } = await db.from('komentar').insert([{nama, isi}])
-  if(error){ alert('Gagal kirim: '+error.message) } 
-  else {
-    alert('Makasih komentarnya!')
-    document.getElementById('namaKomentar').value = ''
-    document.getElementById('isiKomentar').value = ''
-    loadKomentar()
-  }
-}
   </div>
 </section>
 
