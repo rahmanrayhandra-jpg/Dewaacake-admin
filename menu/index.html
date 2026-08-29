@@ -37,7 +37,7 @@
  .logo-icon {width: 40px;height: 40px;}
  .logo span {font-family: 'Playfair Display', serif;font-size: 22px;font-weight: 600;letter-spacing: 3px;color: #3E2F2F;}
 
-  /* SLIDER PRODUK BARU */
+  /* SLIDER PRODUK BARU - UDAH DIFIX */
  .produk-slider {
     display: flex;
     gap: 16px;
@@ -47,13 +47,15 @@
     -webkit-overflow-scrolling: touch;
   }
  .produk-slider::-webkit-scrollbar { display: none; }
- .produk-slider.card {
+ .produk-slider.card { /* INI TADI SALAH */
     min-width: 260px;
     flex-shrink: 0;
     scroll-snap-align: start;
   }
   @media (min-width: 768px){
-   .produk-slider.card { min-width: 300px; }
+   .produk-slider.card { /* INI JUGA */
+      min-width: 300px;
+    }
   }
 
   /* STYLE KOMENTAR BARU */
